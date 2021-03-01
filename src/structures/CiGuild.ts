@@ -1,15 +1,17 @@
 import { Guild } from "discord.js";
 import { CiClient } from ".";
-import { startCiGuildOptions } from "../config";
+import { CiGuildOptionsEconomy, StartCiGuildOptions } from "../config";
 import { GuildEntity} from "@entity"
-import CiGuildOptions from "../typings";
+import { ciGuildOptions, ciGuildOptionsEconomy } from "../typings";
 
 export class CiGuild extends Guild {
-  GuildOptions: CiGuildOptions;
+  options: ciGuildOptions;
+  economy: ciGuildOptionsEconomy;
 
   constructor(client: CiClient, data: Record<string, unknown>) {
     super(client, data);
-    this.GuildOptions;
+    this.options;
+    this.economy;
   }
   public async init(dataGuildEntity: GuildEntity): Promise<void> {
     if (!dataGuildEntity) {
@@ -18,10 +20,14 @@ export class CiGuild extends Guild {
     }
 
     if (!dataGuildEntity.options) {
-      dataGuildEntity.options = startCiGuildOptions;
+      dataGuildEntity.options = StartCiGuildOptions;
+    }
+    if (!dataGuildEntity.economy) {
+      dataGuildEntity.economy = CiGuildOptionsEconomy;
     }
 
     this.options = dataGuildEntity.options;
+    this.economy = dataGuildEntity.economy;
 
     dataGuildEntity.save();
     return;
