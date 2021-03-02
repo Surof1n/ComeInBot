@@ -6,25 +6,29 @@ export class CiEmbed extends MessageEmbed {
     super(data)
   }
 
-  public create(header?: string, description?: string, icon?: string): CiEmbed {
-    const embed = header ? this.setAuthor(header, icon) : new CiEmbed()
-    return description ? embed.setDescription(description): embed
+  public create(author?: string, header?: string, description?: string, footer?: string, icon?: string): CiEmbed {
+    const embed = new CiEmbed()
+    author ? embed.setAuthor(author, icon) : false
+    header ? embed.title = header : false
+    footer ? embed.setFooter(footer) : false 
+    description ? embed.setDescription(description) : false
+    return embed
   }
 
-  public error(header?: string, description?: string): CiEmbed {
-    return this.create(header, description, Icons.error).setColor(Colors.Red)
+  public error(author?: string, header?: string, description?: string, footer?: string): CiEmbed {
+    return this.create(author, header, description, footer, Icons.error).setColor(Colors.Red)
   }
 
-  public warn(header?: string, description?: string): CiEmbed {
-    return this.create(header, description, Icons.warning).setColor(Colors.Yellow)
+  public warn(author?: string, header?: string, description?: string, footer?: string): CiEmbed {
+    return this.create(author, header, description, footer, Icons.warning).setColor(Colors.Yellow)
   }
 
-  public success(header?: string, description?: string): CiEmbed {
-    return this.create(header, description, Icons.success).setColor(Colors.Green)
+  public success(author?: string, header?: string, description?: string, footer?: string): CiEmbed {
+    return this.create(author, header, description, footer, Icons.success).setColor(Colors.Green)
   }
 
-  public info(header?: string, description?: string): CiEmbed {
-    return this.create(header, description, Icons.info).setColor(Colors.Blue)
+  public info(author?: string, header?: string, description?: string, footer?: string): CiEmbed {
+    return this.create(author, header, description, footer, Icons.info).setColor(Colors.Blue)
   }
 
 }

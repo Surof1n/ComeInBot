@@ -1,8 +1,8 @@
 import { Guild } from "discord.js";
-import { CiClient } from ".";
+import { CiClient } from "@structures";
 import { CiGuildOptionsEconomy, StartCiGuildOptions } from "../config";
 import { GuildEntity} from "@entity"
-import { ciGuildOptions, ciGuildOptionsEconomy } from "../typings";
+import { ciGuildOptions, ciGuildOptionsEconomy } from "@typings";
 
 export class CiGuild extends Guild {
   options: ciGuildOptions;

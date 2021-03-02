@@ -9,8 +9,8 @@ export const CiOptions = {
 };
 
 export const defaultGuildEmojis: GuildEmojis = {
-  money: ":moneybag:",
-  reputation: ":trophy:",
+  money: "💰",
+  reputation: "🏆",
   donate: "📜" ,
   accept: "✅",
   decline: "❎"

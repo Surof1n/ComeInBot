@@ -9,6 +9,6 @@ export default class PingCommand extends Command {
     }
 
     exec(message: Message) {
-        return message.reply(message.member.economyController.count);
+        return message.reply(message.member.economyController.sparkCount);
     }
 }
