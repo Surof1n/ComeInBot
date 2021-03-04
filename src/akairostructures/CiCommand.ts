@@ -10,7 +10,6 @@ export class CiCommand extends Command {
     this.prefix = process.env.PREFIX;
   }
   before(message: Message) {
-    console.log(this);
     this.cidescription.examples = this.cidescription.initExamples(message);
   }
 }

@@ -12,7 +12,11 @@ export default class SendCommand extends CiCommand {
         header: 'Помощь по команде: начислить',
         commandForm: '.начислить <кол. валюты> <смайлик валюты> <пользователь>',
         initExamples(message: Message) {
-          return [`${message.guild.economy.emoji}`];
+          return [
+            `.начислить 200 ${message.guild.economy.emoji} <@205085626880491520>`,
+            `.начислить 200 ${message.guild.economy.emoji} Nexus`,
+            `.начислить 200 ${message.guild.economy.emoji} 20508562688049152>`,
+          ];
         },
       },
       args: [
