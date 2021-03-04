@@ -1,5 +1,5 @@
-import { Guild, GuildMember } from "discord.js";
-import { MemberEntity } from "@entity"
+import { Guild, GuildMember } from 'discord.js';
+import { MemberEntity } from '@entity';
 export class EconomyController {
   member: GuildMember;
   guild: Guild;
@@ -25,12 +25,9 @@ export class EconomyController {
     return true;
   }
   async send(sendCount: number, receiverMember: GuildMember, reason: string) {
-    if (await this.remove(sendCount, "Send Spark")) {
-      receiverMember.economyController.add(
-        sendCount,
-        "Receivering Spark"
-      );
-      return true
+    if (await this.remove(sendCount, 'Send Spark')) {
+      receiverMember.economyController.add(sendCount, 'Receivering Spark');
+      return true;
     }
     return false;
   }

@@ -1,11 +1,11 @@
-import { Message } from "discord.js";
-import { CiListener } from "@akairo";
+import { Message } from 'discord.js';
+import { CiListener } from '@akairo';
 
 export default class MessageEvent extends CiListener {
   constructor() {
-    super("message", {
-      emitter: "client",
-      event: "message"
+    super('message', {
+      emitter: 'client',
+      event: 'message',
     });
   }
 
@@ -17,7 +17,7 @@ export default class MessageEvent extends CiListener {
     if (member.user.bot || parsingMessage.command) return;
     member.economyController.add(
       guild.economy.msgPerCount,
-      "Spark add from MessageEvent"
+      'Spark add from MessageEvent'
     );
   }
 }

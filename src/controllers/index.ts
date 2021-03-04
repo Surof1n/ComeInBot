@@ -1,2 +1,2 @@
-export * from "./CiEconomy";
-export * from './CiReputation'
+export * from './CiEconomy';
+export * from './CiReputation';

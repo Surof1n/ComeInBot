@@ -1,11 +1,11 @@
-import { EconomyController, ReputationController } from "@controllers";
-import { MemberEntity, GuildEntity } from "@entity";
+import { EconomyController, ReputationController } from '@controllers';
+import { MemberEntity, GuildEntity } from '@entity';
+import { Message } from 'discord.js';
 
-
-declare module "discord.js" {
+declare module 'discord.js' {
   interface Guild {
     options: ciGuildOptions;
-    economy: ciGuildOptionsEconomy
+    economy: ciGuildOptionsEconomy;
     init(data: GuildEntity): void;
   }
   interface GuildMember {
@@ -15,16 +15,29 @@ declare module "discord.js" {
   }
 }
 
-export type GuildEmojis = {
-  money: string
-  reputation: string
-  donate: string
-  accept: string
-  decline: string
+declare module 'discord-akairo' {
+  interface CommandOptions {
+    cidescription?: CiDescription;
+  }
 }
 
+export type GuildEmojis = {
+  money: string;
+  reputation: string;
+  donate: string;
+  accept: string;
+  decline: string;
+};
+
 export interface ciGuildOptions {
-  logchannel: string
+  logchannel: string;
+}
+
+export interface CiDescription {
+  header: string;
+  commandForm: string;
+  examples?: string[];
+  initExamples(message: Message): string[];
 }
 
 export interface ciGuildOptionsEconomy {
@@ -32,5 +45,3 @@ export interface ciGuildOptionsEconomy {
   msgPerCount: number;
   voicePerCount: number;
 }
-
-

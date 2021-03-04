@@ -1,11 +1,11 @@
-import { CiListener } from "@akairo";
-import { GuildEntity, MemberEntity } from "@entity"
+import { CiListener } from '@akairo';
+import { GuildEntity, MemberEntity } from '@entity';
 
 export default class ReadyEvent extends CiListener {
   constructor() {
-    super("ready", {
-      emitter: "client",
-      event: "ready"
+    super('ready', {
+      emitter: 'client',
+      event: 'ready',
     });
   }
 

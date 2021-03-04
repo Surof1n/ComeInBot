@@ -1,1 +1,2 @@
-export * from './CiListener'
+export * from './CiListener';
+export * from './CiCommand';

@@ -4,4 +4,5 @@
     "todo-tree.tree.disableCompactFolders": true,
     "todo-tree.tree.showCountsInTree": false,
     "editor.formatOnSave": false,
+    "files.eol": "\r\n",
 }

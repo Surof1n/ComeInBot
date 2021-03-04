@@ -5,19 +5,13 @@
   "username": "postgres",
   "password": "vfrcbv01231",
   "database": "CiBot",
-  "entities": [
-    "build/database/entity/**/*.js"
- ],
- "migrations": [
-    "build/database/migration/**/*.js"
- ],
- "subscribers": [
-    "build/database/subscriber/**/*.js"
- ],
- "cli": {
+  "entities": ["build/database/entity/**/*.js"],
+  "migrations": ["build/database/migration/**/*.js"],
+  "subscribers": ["build/database/subscriber/**/*.js"],
+  "cli": {
     "entitiesDir": "build/database/entities",
     "migrationsDir": "build/database/migration",
     "subscribersDir": "build/database/subscriber"
- },
+  },
   "synchronize": true
 }

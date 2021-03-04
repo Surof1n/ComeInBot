@@ -1,7 +1,7 @@
-import { CiClient } from ".";
-import { GuildMember, Guild } from "discord.js";
-import { EconomyController, ReputationController } from "@controllers";
-import { MemberEntity } from "@entity";
+import { CiClient } from '.';
+import { GuildMember, Guild } from 'discord.js';
+import { EconomyController, ReputationController } from '@controllers';
+import { MemberEntity } from '@entity';
 
 export class CiGuildMember extends GuildMember {
   economyController: EconomyController;
