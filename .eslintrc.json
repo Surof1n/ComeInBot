@@ -8,6 +8,7 @@
   "rules": {
     "prettier/prettier": ["error", {
      "endOfLine":"auto",
+     "printWidth": 100,
      "usePrettierrc": true
     }],
     "no-unused-vars": "off",

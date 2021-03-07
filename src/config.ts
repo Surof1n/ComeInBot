@@ -40,6 +40,16 @@ export const Icons = {
   connect: 'https://i.ibb.co/gZnwwS7/member-gray-plus-green.png',
 };
 
+export const Categoryes = new Map<string, string>([
+  ['economy', 'Экономика'],
+  ['utils', 'Полезности'],
+]);
+
+export const CategoryesIcon = new Map<string, string>([
+  ['economy', 'https://i.ibb.co/4dnLdDX/CiCoin.png'],
+  ['utils', 'https://i.ibb.co/d2JNw3D/CiUtils.png'],
+]);
+
 export enum Colors {
   Brand = 0xff8c1a,
   Blue = 0x437db6,

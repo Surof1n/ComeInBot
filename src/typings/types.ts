@@ -1,5 +1,7 @@
 import { EconomyController, ReputationController } from '@controllers';
 import { MemberEntity, GuildEntity } from '@entity';
+import { CiGuild } from '@structures';
+import { Guild } from 'discord.js';
 import { Message } from 'discord.js';
 
 declare module 'discord.js' {
@@ -34,10 +36,11 @@ export interface ciGuildOptions {
 }
 
 export interface CiDescription {
-  header: string;
-  commandForm: string;
+  header?: string;
+  commandForm?: string;
   examples?: string[];
-  initExamples(message: Message): string[];
+  rules?: string;
+  initExamples(guild: Guild): string[];
 }
 
 export interface ciGuildOptionsEconomy {
@@ -45,3 +48,5 @@ export interface ciGuildOptionsEconomy {
   msgPerCount: number;
   voicePerCount: number;
 }
+
+export const mainGuildId = '703977369966346332';

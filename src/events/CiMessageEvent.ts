@@ -11,13 +11,11 @@ export default class MessageEvent extends CiListener {
 
   async exec(message: Message) {
     const { member, channel, guild, content } = message;
-    const parsingMessage = await this.client.commandHandler.parseCommand(
-      message
-    );
-    if (member.user.bot || parsingMessage.command) return;
-    member.economyController.add(
-      guild.economy.msgPerCount,
-      'Spark add from MessageEvent'
-    );
+
+    const parsingMessage = await this.client.commandHandler.parseCommand(message);
+
+    if (member.user.bot || parsingMessage.prefix) return;
+
+    member.economyController.add(guild.economy.msgPerCount, 'Spark add from MessageEvent');
   }
 }

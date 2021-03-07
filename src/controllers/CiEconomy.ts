@@ -25,7 +25,7 @@ export class EconomyController {
     return true;
   }
   async send(sendCount: number, receiverMember: GuildMember, reason: string) {
-    if (await this.remove(sendCount, 'Send Spark')) {
+    if ((await this.remove(sendCount, 'Send Spark')) && this.member.id != receiverMember.id) {
       receiverMember.economyController.add(sendCount, 'Receivering Spark');
       return true;
     }
