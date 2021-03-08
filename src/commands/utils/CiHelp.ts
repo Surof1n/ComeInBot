@@ -22,8 +22,7 @@ export default class HelpCommand extends CiCommand {
       ],
     });
   }
-  async exec(message: Message, { command }: { command: string }) {
-    const { member, channel, guild, author } = message;
+  async exec({ member, channel, guild, author }: Message, { command }: { command: string }) {
     const categoryes = this.client.commandHandler.categories;
 
     if (command) {
@@ -76,11 +75,9 @@ export default class HelpCommand extends CiCommand {
 
       return embed;
     });
-    const embedMessage = await channel.send(helpEmbed[sliderIndex]).then(async (m) => {
-      m.react(emojiLeft);
-      m.react(emojiRight);
-      return m;
-    });
+    const embedMessage = await channel.send(helpEmbed[sliderIndex]);
+
+    for (const e of [emojiLeft, emojiRight]) embedMessage.react(e);
 
     const emojiListCollector = embedMessage.createReactionCollector(
       (reaction: MessageReaction, user: User) => user.id === author.id,
@@ -90,15 +87,13 @@ export default class HelpCommand extends CiCommand {
     emojiListCollector.on('collect', async (react, user) => {
       if (react.emoji.name === emojiRight) {
         sliderIndex === helpEmbed.length - 1 ? (sliderIndex = 0) : (sliderIndex += 1);
-        await embedMessage.edit(helpEmbed[sliderIndex]);
-        react.users.remove(user);
       } else if (react.emoji.name === emojiLeft) {
         sliderIndex == 0 ? (sliderIndex = helpEmbed.length - 1) : (sliderIndex -= 1);
-        await embedMessage.edit(helpEmbed[sliderIndex]);
-        react.users.remove(user);
       } else {
-        await embedMessage.delete();
+        return embedMessage.delete();
       }
+      await embedMessage.edit(helpEmbed[sliderIndex]);
+      react.users.remove(user);
     });
   }
 }

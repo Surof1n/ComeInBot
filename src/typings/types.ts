@@ -6,8 +6,8 @@ import { Message } from 'discord.js';
 
 declare module 'discord.js' {
   interface Guild {
-    options: ciGuildOptions;
-    economy: ciGuildOptionsEconomy;
+    options: CiGuildOptions;
+    economy: CiGuildEconomy;
     init(data: GuildEntity): void;
   }
   interface GuildMember {
@@ -23,6 +23,12 @@ declare module 'discord-akairo' {
   }
 }
 
+declare global {
+  interface Array<T> {
+    randomitem(): T;
+  }
+}
+
 export type GuildEmojis = {
   money: string;
   reputation: string;
@@ -31,7 +37,7 @@ export type GuildEmojis = {
   decline: string;
 };
 
-export interface ciGuildOptions {
+export interface CiGuildOptions {
   logchannel: string;
 }
 
@@ -43,7 +49,7 @@ export interface CiDescription {
   initExamples(guild: Guild): string[];
 }
 
-export interface ciGuildOptionsEconomy {
+export interface CiGuildEconomy {
   emoji: string;
   msgPerCount: number;
   voicePerCount: number;

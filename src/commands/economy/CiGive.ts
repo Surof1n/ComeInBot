@@ -46,7 +46,7 @@ export default class giveCommand extends CiCommand {
   }
 
   async exec(
-    message: Message,
+    { member, channel, guild }: Message,
     {
       count,
       valueType,
@@ -57,59 +57,61 @@ export default class giveCommand extends CiCommand {
       receiver: GuildMember[] | GuildMember;
     }
   ): Promise<Message> {
-    const { member, channel, guild } = message;
     if (!receiver || !valueType || !count)
-      return await channel.send(new CiEmbed().errorCommand(this.prefix));
+      return channel.send(new CiEmbed().errorCommand(this.prefix));
 
     count = Math.round(count);
     const positive = count > 0;
     count = positive ? count : -count;
+    switch (valueType) {
+      case guild.economy.emoji:
+        if (Array.isArray(receiver)) {
+          if (member.economyController.sparkCount < receiver.length * count)
+            return channel.send(new CiEmbed().errorCommandValue(this.prefix));
+          receiver.forEach((recMember) => {
+            const action = `Передача ${count} ${valueType} от ${member.displayName}, к ${recMember.displayName}`;
+            member.economyController.send(count, recMember, action);
+          });
 
-    if (valueType === guild.economy.emoji) {
-      if (Array.isArray(receiver)) {
-        if (member.economyController.sparkCount < receiver.length * count)
-          return await channel.send(new CiEmbed().errorCommandValue(this.prefix));
-        receiver.forEach((recMember) => {
-          const action = `Передача ${count} ${valueType} от ${member.displayName}, к ${recMember.displayName}`;
-          member.economyController.send(count, recMember, action);
-        });
+          const embAction = {
+            header: `${member.displayName} передал ${receiver.length} пользователям, по ${count} ${valueType}!`,
+            quoting: messages.pay_currency[randomInt(0, messages.pay_currency.length)],
+          };
 
-        const embAction = {
-          header: `${member.displayName} передал ${receiver.length} пользователям, по ${count} ${valueType}!`,
-          quoting: messages.pay_currency[randomInt(0, messages.pay_currency.length)],
-        };
-
-        channel.send(
-          new CiEmbed().info(
-            'Уведомление!',
-            embAction.header,
-            embAction.quoting.text,
-            embAction.quoting.author
-          )
-        );
-      } else {
-        const embAction = {
-          header: `Передача ${count} ${valueType} от ${member.displayName}, к ${receiver.displayName}`,
-          quoting: messages.pay_currency[randomInt(0, messages.pay_currency.length)],
-        };
-        const boolAboutSend = await member.economyController.send(
-          count,
-          receiver,
-          embAction.header
-        );
-        boolAboutSend
-          ? await channel.send(
-              new CiEmbed().info(
-                'Уведомление!',
-                embAction.header,
-                embAction.quoting.text,
-                embAction.quoting.author
-              )
+          channel.send(
+            new CiEmbed().info(
+              'Уведомление!',
+              embAction.header,
+              embAction.quoting.text,
+              embAction.quoting.author
             )
-          : await channel.send(new CiEmbed().errorCommandValue(this.prefix));
-      }
-    } else {
-      return await channel.send(new CiEmbed().errorCommand(this.prefix));
+          );
+        } else {
+          const embAction = {
+            header: `Передача ${count} ${valueType} от ${member.displayName}, к ${receiver.displayName}`,
+            quoting: messages.pay_currency[randomInt(0, messages.pay_currency.length)],
+          };
+          const boolAboutSend = await member.economyController.send(
+            count,
+            receiver,
+            embAction.header
+          );
+          boolAboutSend
+            ? await channel.send(
+                new CiEmbed().info(
+                  'Уведомление!',
+                  embAction.header,
+                  embAction.quoting.text,
+                  embAction.quoting.author
+                )
+              )
+            : await channel.send(new CiEmbed().errorCommandValue(this.prefix));
+        }
+        break;
+
+      default:
+        return channel.send(new CiEmbed().errorCommand(this.prefix));
+        break;
     }
   }
 }

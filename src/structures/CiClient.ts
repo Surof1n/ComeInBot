@@ -13,7 +13,8 @@ export class CiClient extends AkairoClient {
 
   constructor() {
     super({
-      // TODO: ClientOptions
+      disableMentions: 'everyone',
+      messageCacheMaxSize: 100,
     });
     this.commandHandler = new CommandHandler(this, {
       directory: join(__dirname, '..', 'commands'),
@@ -23,17 +24,23 @@ export class CiClient extends AkairoClient {
       directory: join(__dirname, '..', 'events'),
     });
     this.commandHandler.resolver.addType('CiMembers', (message, phrase) => {
-      const members: GuildMember[] = [];
-      phrase.split(' ').forEach((phraseitem) => {
-        members.push(
-          message.guild.members.cache
-            .filter((member) => this.util.checkMember(phraseitem, member, false, true))
-            .array()[0]
+      const members = phrase
+        .split(' ')
+        .map((item) =>
+          message.guild.members.cache.find((member) =>
+            this.util.checkMember(item, member, false, true)
+          )
+        )
+        .filter((member) => member.id != message.author.id);
+      if (members.length > 1) return members;
+      else if (members.length == 1) {
+        const member = message.guild.members.cache.find((member) =>
+          this.util.checkMember(phrase, member, false, true)
         );
-      });
-      if (members.includes(undefined)) return null;
-      if (members.length === 1 && members[0] instanceof GuildMember) return members[0];
-      return members;
+        if (member.id == message.author.id) return null;
+        return member;
+      }
+      return null;
     });
     this.eventHandler.setEmitters({
       commandHandler: this.commandHandler,
@@ -44,8 +51,7 @@ export class CiClient extends AkairoClient {
     this.commandHandler.loadAll();
   }
 
-  async init(): Promise<boolean> {
-    await this.login(CiOptions.token);
-    return true;
+  async init() {
+    return this.login(CiOptions.token);
   }
 }

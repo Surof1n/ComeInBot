@@ -8,6 +8,10 @@ Structures.extend('Guild', () => CiGuild);
 
 Structures.extend('GuildMember', () => CiGuildMember);
 
+Array.prototype.randomitem = function () {
+  return this[Math.floor(Math.random() * this.length)];
+};
+
 async function run() {
   await createConnection()
     .then(() => console.log('Connect Come In Database 🔥🔥🔥'))

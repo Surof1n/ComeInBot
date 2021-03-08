@@ -1,5 +1,5 @@
 import { BaseEntity, Column, Entity, Index, PrimaryColumn } from 'typeorm';
-import { ciGuildOptions, ciGuildOptionsEconomy } from '../../typings';
+import { CiGuildOptions, CiGuildEconomy } from '../../typings';
 
 @Entity()
 export class GuildEntity extends BaseEntity {
@@ -8,8 +8,8 @@ export class GuildEntity extends BaseEntity {
   id: string;
 
   @Column('simple-json')
-  options: ciGuildOptions;
+  options: CiGuildOptions;
 
   @Column('simple-json')
-  economy: ciGuildOptionsEconomy;
+  economy: CiGuildEconomy;
 }
