@@ -18,16 +18,11 @@
       "@akairo": ["src/akairostructures"],
       "@structures": ["src/structures"],
       "@entity": ["src/database/entity"],
-      "@controllers": ["src/controllers"]
+      "@controllers": ["src/controllers"],
+      "@resources": ["src/resources"],
+      "@typings": ["src/typings"]
     }
   },
-  "include": [
-    "src",
-    "*/*",
-    "*/*/*"
-  ],
-  "exclude": [
-      "node_modules",
-      "**/*.spec.ts"
-  ],
+  "include": ["src", "*/*", "*/*/*"],
+  "exclude": ["node_modules", "**/*.spec.ts"]
 }

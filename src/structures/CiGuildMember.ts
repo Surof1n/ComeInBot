@@ -1,7 +1,7 @@
-import { CiClient } from ".";
-import { GuildMember, Guild } from "discord.js";
-import { EconomyController, ReputationController } from "@controllers";
-import { MemberEntity } from "@entity";
+import { CiClient } from '.';
+import { GuildMember, Guild } from 'discord.js';
+import { EconomyController, ReputationController } from '@controllers';
+import { MemberEntity } from '@entity';
 
 export class CiGuildMember extends GuildMember {
   economyController: EconomyController;
@@ -23,10 +23,7 @@ export class CiGuildMember extends GuildMember {
     }
 
     this.economyController = new EconomyController(this, dataMember.moneyCount);
-    this.reputationController = new ReputationController(
-      this,
-      dataMember.reputationCount
-    );
+    this.reputationController = new ReputationController(this, dataMember.reputationCount);
     return;
   }
 }

@@ -1,4 +1,4 @@
-import { Guild, GuildMember } from "discord.js";
+import { Guild, GuildMember } from 'discord.js';
 
 export class ReputationController {
   member: GuildMember;
@@ -12,7 +12,7 @@ export class ReputationController {
     this.activeMembers;
   }
 
-  get repValue() {
+  get repValue(): number {
     return this.count;
   }
 }
