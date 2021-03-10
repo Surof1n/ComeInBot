@@ -87,6 +87,32 @@ export default class GuildOptionsCommand extends CiCommand {
             `Значение параметра у гильдии измененно: ${guild.economy.voicePerCount}`
           )
         );
+      case 'msgPerCount':
+        if (!valueSettings)
+          return channel.send(
+            new CiEmbed().info(
+              `Запрос на выдачу параметра ${typeSettings}`,
+              '',
+              `Значение параметра у гильдии: ${guild.economy.msgPerCount}`
+            )
+          );
+        if (isNaN(+valueSettings))
+          return channel.send(
+            new CiEmbed().error(
+              `Параметр ${typeSettings} не обновлён!`,
+              '',
+              `Значение параметра у гильдии осталось тем же: ${guild.economy.msgPerCount}`
+            )
+          );
+        guild.economy.msgPerCount = +valueSettings;
+        GuildEntity.update({ id: guild.id }, { economy: guild.economy });
+        return channel.send(
+          new CiEmbed().info(
+            `Обновление параметра ${typeSettings}`,
+            '',
+            `Значение параметра у гильдии измененно: ${guild.economy.msgPerCount}`
+          )
+        );
       default:
         return channel.send(
           new CiEmbed().error(
