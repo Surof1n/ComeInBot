@@ -1,5 +1,5 @@
 import { Guild, GuildMember } from 'discord.js';
-import { MemberEntity } from '@entity';
+import { MemberEntity, TransferEntity } from '@entity';
 export class EconomyController {
   member: GuildMember;
   guild: Guild;
@@ -27,6 +27,16 @@ export class EconomyController {
   async send(sendCount: number, receiverMember: GuildMember, reason: string) {
     if ((await this.remove(sendCount, 'Send Spark')) && this.member.id != receiverMember.id) {
       receiverMember.economyController.add(sendCount, 'Receivering Spark');
+
+      const dataTranfer = new TransferEntity(
+        new Date().getTime() + this.member.id,
+        this.member.id,
+        receiverMember.id,
+        receiverMember.guild.id,
+        'spark',
+        sendCount
+      );
+      dataTranfer.save();
       return true;
     }
     return false;
@@ -34,5 +44,9 @@ export class EconomyController {
 
   get sparkCount() {
     return this.count;
+  }
+
+  set sparkCount(newCount: number) {
+    this.count = newCount;
   }
 }

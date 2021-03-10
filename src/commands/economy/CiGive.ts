@@ -62,7 +62,7 @@ export default class giveCommand extends CiCommand {
 
     count = Math.round(count);
     const positive = count > 0;
-    count = positive ? count : -count;
+    count = Math.abs(count);
     switch (valueType) {
       case guild.economy.emoji:
         if (Array.isArray(receiver)) {

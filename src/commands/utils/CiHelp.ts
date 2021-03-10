@@ -27,8 +27,8 @@ export default class HelpCommand extends CiCommand {
 
     if (command) {
       const parseCommand = this.client.commandHandler.findCommand(command) as CiCommand;
-      parseCommand.cidescription ? parseCommand.cidescription.initExamples(guild) : false;
       if (!parseCommand) return;
+      parseCommand.cidescription ? parseCommand.cidescription.initExamples(guild) : false;
       const helpEmbed = new CiEmbed().create(
         `Помощь по модулю ${Categoryes.get(parseCommand.categoryID)}`,
         `Помощь по команде \`.${parseCommand.id}\``,
@@ -39,13 +39,13 @@ export default class HelpCommand extends CiCommand {
       parseCommand.description
         ? helpEmbed.addField('Описание:', `${parseCommand.description}`)
         : false;
-      parseCommand.cidescription.commandForm
+      parseCommand.cidescription?.commandForm
         ? helpEmbed.addField('Использование:', `${parseCommand.cidescription.commandForm}`)
         : false;
-      parseCommand.cidescription.rules
+      parseCommand.cidescription?.rules
         ? helpEmbed.addField('Правила использования:', `${parseCommand.cidescription.rules}`)
         : false;
-      parseCommand.cidescription.examples
+      parseCommand.cidescription?.examples
         ? helpEmbed.addField(
             'Примеры использования:',
             `${parseCommand.cidescription.examples.join('\n')}`
