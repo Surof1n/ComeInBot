@@ -29,12 +29,11 @@ export class EconomyController {
       receiverMember.economyController.add(sendCount, 'Receivering Spark');
 
       const dataTranfer = new TransferEntity(
-        new Date().getTime() + this.member.id,
-        this.member.id,
-        receiverMember.id,
-        receiverMember.guild.id,
+        this.member,
+        receiverMember,
+        receiverMember.guild,
         'spark',
-        sendCount
+        1
       );
       dataTranfer.save();
       return true;

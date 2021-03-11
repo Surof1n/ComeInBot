@@ -91,6 +91,7 @@ export default class giveCommand extends CiCommand {
             header: `Передача ${count} ${valueType} от ${member.displayName}, к ${receiver.displayName}`,
             quoting: messages.pay_currency[randomInt(0, messages.pay_currency.length)],
           };
+          member.reputationController.send(receiver, '123');
           const boolAboutSend = await member.economyController.send(
             count,
             receiver,

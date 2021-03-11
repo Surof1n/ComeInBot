@@ -1,21 +1,22 @@
+import { Guild } from 'discord.js';
+import { GuildMember } from 'discord.js';
 import { TransferTypes } from 'src/config';
 import { BaseEntity, Column, CreateDateColumn, Entity, Index, PrimaryColumn } from 'typeorm';
 
 @Entity()
 export class TransferEntity extends BaseEntity {
   constructor(
-    transferId: string,
-    transferMemberId: string,
-    transferGuild: string,
-    transferReciverId: string,
+    transferMember: GuildMember,
+    transferReciver: GuildMember,
+    transferGuild: Guild,
     transferType: TransferTypes,
     transferCount: number
   ) {
     super();
-    this.transferId = transferId;
-    this.transferMemberId = transferMemberId;
-    this.transferGuild = transferGuild;
-    this.transferReciverId = transferReciverId;
+    this.transferId = new Date().getTime() + transferMember?.id;
+    this.transferMemberId = transferMember?.id;
+    this.transferReciverId = transferReciver?.id;
+    this.transferGuild = transferGuild?.id;
     this.transferType = transferType;
     this.transferCount = transferCount;
   }
