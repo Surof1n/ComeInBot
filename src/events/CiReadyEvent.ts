@@ -1,6 +1,7 @@
 import { CiCommand, CiListener } from '@akairo';
 import { GuildEntity, MemberEntity } from '@entity';
 import { mainGuildId } from '@typings';
+import { CiRepTimeout } from 'src/utils/timeouts/CiRepTimeOut';
 
 export default class ReadyEvent extends CiListener {
   constructor() {
@@ -19,5 +20,6 @@ export default class ReadyEvent extends CiListener {
         member.init(allEntityMembers.find((entityMember) => entityMember.id === member.id));
       });
     });
+    new CiRepTimeout()._init();
   }
 }
