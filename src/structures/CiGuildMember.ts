@@ -23,7 +23,11 @@ export class CiGuildMember extends GuildMember {
     }
 
     this.economyController = new EconomyController(this, dataMember.moneyCount);
-    this.reputationController = new ReputationController(this, dataMember.reputationCount);
+    this.reputationController = new ReputationController(
+      this,
+      dataMember.reputationCount,
+      dataMember.rankedReputationCount
+    );
     return;
   }
 }

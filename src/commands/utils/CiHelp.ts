@@ -24,7 +24,6 @@ export default class HelpCommand extends CiCommand {
   }
   async exec({ member, channel, guild, author }: Message, { command }: { command: string }) {
     const categoryes = this.client.commandHandler.categories;
-
     if (command) {
       const parseCommand = this.client.commandHandler.findCommand(command) as CiCommand;
       if (!parseCommand) return;

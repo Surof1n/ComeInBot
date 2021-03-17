@@ -6,10 +6,12 @@ export class ReputationController {
   member: GuildMember;
   guild: Guild;
   count: number;
-  constructor(member: GuildMember, count: number) {
+  rankedCount: number;
+  constructor(member: GuildMember, count: number, rankedCount: number) {
     this.member = member;
     this.guild = member.guild;
     this.count = count;
+    this.rankedCount = rankedCount;
   }
   async send(receiverMember: GuildMember, reason: string) {
     const transfers = await TransferEntity.find({
@@ -23,9 +25,13 @@ export class ReputationController {
       return false;
     }
     receiverMember.reputationController.count += 1;
+    receiverMember.reputationController.rankedCount = receiverMember.reputationController.count;
     MemberEntity.update(
       { id: receiverMember.id },
-      { reputationCount: receiverMember.reputationController.count }
+      {
+        reputationCount: receiverMember.reputationController.count,
+        rankedReputationCount: receiverMember.reputationController.rankedCount,
+      }
     );
     const dataTranfer = new TransferEntity(
       this.member,

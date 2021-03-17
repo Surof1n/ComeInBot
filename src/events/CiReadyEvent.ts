@@ -1,7 +1,7 @@
 import { CiCommand, CiListener } from '@akairo';
 import { GuildEntity, MemberEntity } from '@entity';
 import { mainGuildId } from '@typings';
-import { CiRepTimeout } from 'src/utils/timeouts/CiRepTimeOut';
+import { CiRepTimeout } from '../utils';
 
 export default class ReadyEvent extends CiListener {
   constructor() {
