@@ -75,7 +75,7 @@ export default class giveCommand extends CiCommand {
 
           const embAction = {
             header: `${member.displayName} передал ${receiver.length} пользователям, по ${count} ${valueType}!`,
-            quoting: messages.pay_currency[randomInt(0, messages.pay_currency.length)],
+            quoting: messages.send_currency[randomInt(0, messages.pay_currency.length)],
           };
 
           channel.send(
@@ -89,24 +89,25 @@ export default class giveCommand extends CiCommand {
         } else {
           const embAction = {
             header: `Передача ${count} ${valueType} от ${member.displayName}, к ${receiver.displayName}`,
-            quoting: messages.pay_currency[randomInt(0, messages.pay_currency.length)],
+            quoting: messages.send_currency[randomInt(0, messages.pay_currency.length)],
           };
-          member.reputationController.send(receiver, '123');
           const boolAboutSend = await member.economyController.send(
             count,
             receiver,
             embAction.header
           );
-          boolAboutSend
-            ? await channel.send(
-                new CiEmbed().info(
-                  'Уведомление!',
-                  embAction.header,
-                  embAction.quoting.text,
-                  embAction.quoting.author
-                )
+          if (boolAboutSend) {
+            return channel.send(
+              new CiEmbed().info(
+                'Уведомление!',
+                embAction.header,
+                embAction.quoting.text,
+                embAction.quoting.author
               )
-            : await channel.send(new CiEmbed().errorCommandValue(this.prefix));
+            );
+          } else {
+            return channel.send(new CiEmbed().errorCommandValue(this.prefix));
+          }
         }
         break;
 

@@ -2,7 +2,7 @@
 import * as dotenv from 'dotenv';
 import { type } from 'node:os';
 import { join } from 'path';
-import { CiGuildOptions, CiGuildEconomy, GuildEmojis } from './typings';
+import { CiGuildOptions, CiGuildEconomy, GuildEmojis, CiGuildReputation } from './typings';
 dotenv.config({ path: join(__dirname, '..', '.env') });
 
 export const CiOptions = {
@@ -25,6 +25,9 @@ export const CiGuildOptionsEconomy: CiGuildEconomy = {
   msgPerCount: 1,
   voicePerCount: 10,
   emoji: defaultGuildEmojis.money,
+};
+export const CiGuildOptionsReputation: CiGuildReputation = {
+  emoji: defaultGuildEmojis.reputation,
 };
 
 export enum Icons {

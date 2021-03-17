@@ -1,6 +1,6 @@
 import { MemberEntity, TransferEntity } from '@entity';
 import { Guild, GuildMember } from 'discord.js';
-import moment from 'moment-timezone';
+import * as moment from 'moment';
 
 export class ReputationController {
   member: GuildMember;
@@ -12,8 +12,16 @@ export class ReputationController {
     this.count = count;
   }
   async send(receiverMember: GuildMember, reason: string) {
-    const transfers = await TransferEntity.find({ transferReciverId: receiverMember.id });
-    if (transfers.filter((transfer) => moment(transfer.transferDate))) return;
+    const transfers = await TransferEntity.find({
+      transferMemberId: this.member.id,
+      transferReciverId: receiverMember.id,
+      transferType: 'reputation',
+    });
+    if (
+      transfers.find((transfer) => moment().diff(moment(transfer.transferDate), 'days', true) < 1)
+    ) {
+      return false;
+    }
     receiverMember.reputationController.count += 1;
     MemberEntity.update(
       { id: receiverMember.id },
@@ -23,7 +31,7 @@ export class ReputationController {
       this.member,
       receiverMember,
       receiverMember.guild,
-      'spark',
+      'reputation',
       1
     );
     dataTranfer.save();

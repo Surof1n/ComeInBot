@@ -33,7 +33,7 @@ export class EconomyController {
         receiverMember,
         receiverMember.guild,
         'spark',
-        1
+        sendCount
       );
       dataTranfer.save();
       return true;

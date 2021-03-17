@@ -8,6 +8,7 @@ declare module 'discord.js' {
   interface Guild {
     options: CiGuildOptions;
     economy: CiGuildEconomy;
+    reputation: CiGuildReputation;
     init(data: GuildEntity): void;
   }
   interface GuildMember {
@@ -53,6 +54,10 @@ export interface CiGuildEconomy {
   emoji: string;
   msgPerCount: number;
   voicePerCount: number;
+}
+
+export interface CiGuildReputation {
+  emoji: string;
 }
 
 export const mainGuildId = '703977369966346332';
