@@ -33,7 +33,7 @@ export class TransferEntity extends BaseEntity {
   @Column('char', { length: 18 })
   transferReciverId: string;
 
-  @Column({ type: 'enum', enum: ['spark', 'penta', 'reputation'] })
+  @Column({ type: 'enum', enum: ['spark', 'penta', 'reputation', 'monthReputation'] })
   transferType: TransferTypes;
 
   @Column('int')

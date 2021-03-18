@@ -16,10 +16,10 @@ export default class ReadyEvent extends CiListener {
     const allEntityGuilds = await GuildEntity.find();
     this.client.guilds.cache.forEach((guild) => {
       guild.init(allEntityGuilds.find((entityGuild) => entityGuild.id === guild.id));
+      new CiRepTimeout()._init(guild, this.client);
       guild.members.cache.forEach((member) => {
         member.init(allEntityMembers.find((entityMember) => entityMember.id === member.id));
       });
     });
-    new CiRepTimeout()._init();
   }
 }

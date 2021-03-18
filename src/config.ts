@@ -44,7 +44,7 @@ export enum Icons {
   connect = 'https://i.ibb.co/gZnwwS7/member-gray-plus-green.png',
 }
 
-export type TransferTypes = 'spark' | 'penta' | 'reputation';
+export type TransferTypes = 'spark' | 'penta' | 'reputation' | 'monthReputation';
 
 export const Categoryes = new Map<string, string>([
   ['economy', 'Экономика'],

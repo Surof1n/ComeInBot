@@ -43,6 +43,16 @@ export class ReputationController {
     dataTranfer.save();
     return true;
   }
+
+  public mouthUpdate() {
+    this.count = 0;
+    MemberEntity.update(
+      { id: this.member.id },
+      {
+        reputationCount: this.count,
+      }
+    );
+  }
   get repValue(): number {
     return this.count;
   }
