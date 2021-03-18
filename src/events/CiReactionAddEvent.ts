@@ -15,6 +15,7 @@ export default class ReactionAddEvent extends CiListener {
   }
 
   async exec({ message, emoji, client }: MessageReaction, userReaction: User) {
+    if (userReaction.bot) return;
     const memberReaction = message.guild.members.cache.find(
       (member) => member.id == userReaction.id
     );
@@ -23,7 +24,6 @@ export default class ReactionAddEvent extends CiListener {
         new CiEmbed().error('Ошибка', null, `Вы не можете подарить теплоту себе!`)
       );
     }
-    if (userReaction.bot) return;
 
     if (emoji.toString() === message.guild.reputation.emoji) {
       const infoEmbed = {
