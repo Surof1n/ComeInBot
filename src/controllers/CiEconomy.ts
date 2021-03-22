@@ -11,14 +11,12 @@ export class EconomyController {
   }
 
   async add(addCount: number, reason: string) {
-    // TODO: Create Transferm Form
     if (addCount <= 0) return false;
     this.count = this.count + addCount;
     MemberEntity.update({ id: this.member.id }, { moneyCount: this.count });
     return true;
   }
   async remove(removeCount: number, reason: string) {
-    // TODO: Create Transferm Form
     if (removeCount <= 0 || this.count - removeCount < 0) return false;
     this.count = this.count - removeCount;
     MemberEntity.update({ id: this.member.id }, { moneyCount: this.count });

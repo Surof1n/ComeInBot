@@ -1,4 +1,4 @@
-import { EconomyController, ReputationController } from '@controllers';
+import { EconomyController, PentaController, ReputationController } from '@controllers';
 import { MemberEntity, GuildEntity } from '@entity';
 import { CiGuild } from '@structures';
 import { Guild } from 'discord.js';
@@ -14,6 +14,7 @@ declare module 'discord.js' {
   interface GuildMember {
     economyController: EconomyController;
     reputationController: ReputationController;
+    pentaController: PentaController;
     init(data: MemberEntity): void;
   }
 }

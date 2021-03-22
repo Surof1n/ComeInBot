@@ -14,4 +14,7 @@ export class MemberEntity extends BaseEntity {
 
   @Column('int', { default: 0 })
   rankedReputationCount: number;
+
+  @Column('int', { default: 0 })
+  pentaCount: number;
 }
