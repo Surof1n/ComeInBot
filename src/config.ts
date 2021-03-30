@@ -58,6 +58,9 @@ export const CategoryesIcon = new Map<string, string>([
   ['settings', 'https://i.ibb.co/d2JNw3D/CiUtils.png'],
 ]);
 
+export const TopsImages =
+  'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/twitter/281/trophy_1f3c6.png';
+
 export enum Colors {
   Brand = 0xff8c1a,
   Blue = 0x437db6,

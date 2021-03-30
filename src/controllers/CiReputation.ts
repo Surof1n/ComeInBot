@@ -14,6 +14,7 @@ export class ReputationController {
     this.rankedCount = rankedCount;
   }
   async send(receiverMember: GuildMember, reason: string) {
+    if (receiverMember.user.bot) return false;
     const transfers = await TransferEntity.find({
       transferMemberId: this.member.id,
       transferReciverId: receiverMember.id,

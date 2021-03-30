@@ -47,9 +47,17 @@ export class CiEmbed extends MessageEmbed {
     );
   }
 
-  public errorCommandValue(prefix: string | string[] | PrefixSupplier) {
+  public errorCommandEconomyValue(prefix: string | string[] | PrefixSupplier) {
     return this.error(
       'Ошибка! Возможно, нехватает валюты.',
+      null,
+      `**Ознакомтесь с командой:**\nВведите ${prefix}help`,
+      `В случае повторной ошибки обратитесь к администратору.`
+    );
+  }
+  public errorCommandValue(prefix: string | string[] | PrefixSupplier) {
+    return this.error(
+      'Ошибка! Возможно, вы ввели неправильный параметр команды.',
       null,
       `**Ознакомтесь с командой:**\nВведите ${prefix}help`,
       `В случае повторной ошибки обратитесь к администратору.`

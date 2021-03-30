@@ -15,7 +15,6 @@ export default class ReactionAddEvent extends CiListener {
   }
 
   async exec({ message, emoji, client }: MessageReaction, userReaction: User) {
-    if (userReaction.bot) return;
     const memberReaction = message.guild.members.cache.find(
       (member) => member.id == userReaction.id
     );

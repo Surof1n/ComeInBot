@@ -69,7 +69,7 @@ export default class SendCommand extends CiCommand {
             }).length != receiver.length &&
             !positive
           )
-            return channel.send(new CiEmbed().errorCommandValue(this.prefix));
+            return channel.send(new CiEmbed().errorCommandEconomyValue(this.prefix));
 
           receiver.forEach((recMember) => {
             if (positive) {
@@ -117,7 +117,7 @@ export default class SendCommand extends CiCommand {
             );
           } else {
             await receiver.economyController.remove(count, embAction.header);
-            await channel.send(new CiEmbed().errorCommandValue(this.prefix));
+            await channel.send(new CiEmbed().errorCommandEconomyValue(this.prefix));
           }
         }
         break;

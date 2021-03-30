@@ -67,7 +67,7 @@ export default class giveCommand extends CiCommand {
       case guild.economy.emoji:
         if (Array.isArray(receiver)) {
           if (member.economyController.sparkCount < receiver.length * count)
-            return channel.send(new CiEmbed().errorCommandValue(this.prefix));
+            return channel.send(new CiEmbed().errorCommandEconomyValue(this.prefix));
           receiver.forEach((recMember) => {
             const action = `Передача ${count} ${valueType} от ${member.displayName}, к ${recMember.displayName}`;
             member.economyController.send(count, recMember, action);
@@ -106,7 +106,7 @@ export default class giveCommand extends CiCommand {
               )
             );
           } else {
-            return channel.send(new CiEmbed().errorCommandValue(this.prefix));
+            return channel.send(new CiEmbed().errorCommandEconomyValue(this.prefix));
           }
         }
         break;
