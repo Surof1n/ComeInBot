@@ -18,6 +18,9 @@ export default class ReactionAddEvent extends CiListener {
     const memberReaction = message.guild.members.cache.find(
       (member) => member.id == userReaction.id
     );
+
+    if (message.author.bot) return;
+
     if (memberReaction.id == message.author.id) {
       return message.channel.send(
         new CiEmbed().error('Ошибка', null, `Вы не можете подарить теплоту себе!`)
