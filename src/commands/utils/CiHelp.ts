@@ -24,14 +24,16 @@ export default class HelpCommand extends CiCommand {
   }
   async exec({ member, channel, guild, author }: Message, { command }: { command: string }) {
     const categoryes = this.client.commandHandler.categories;
-
     if (command) {
       const parseCommand = this.client.commandHandler.findCommand(command) as CiCommand;
+      if (!parseCommand) {
+        channel.send(new CiEmbed().info('Команда не найдёна!'));
+        return;
+      }
       parseCommand.cidescription ? parseCommand.cidescription.initExamples(guild) : false;
-      if (!parseCommand) return;
       const helpEmbed = new CiEmbed().create(
         `Помощь по модулю ${Categoryes.get(parseCommand.categoryID)}`,
-        `Помощь по команде \`.${parseCommand.id}\``,
+        `Помощь по команде \`${this.prefix}${parseCommand.id}\``,
         null,
         null,
         `${CategoryesIcon.get(parseCommand.category.id)}`
@@ -39,16 +41,22 @@ export default class HelpCommand extends CiCommand {
       parseCommand.description
         ? helpEmbed.addField('Описание:', `${parseCommand.description}`)
         : false;
-      parseCommand.cidescription.commandForm
+      parseCommand.cidescription?.commandForm
         ? helpEmbed.addField('Использование:', `${parseCommand.cidescription.commandForm}`)
         : false;
-      parseCommand.cidescription.rules
+      parseCommand.cidescription?.rules
         ? helpEmbed.addField('Правила использования:', `${parseCommand.cidescription.rules}`)
         : false;
-      parseCommand.cidescription.examples
+      parseCommand.cidescription?.examples
         ? helpEmbed.addField(
             'Примеры использования:',
             `${parseCommand.cidescription.examples.join('\n')}`
+          )
+        : false;
+      parseCommand.aliases
+        ? helpEmbed.addField(
+            'Иные названия:',
+            `${parseCommand.aliases.map((item) => `\`\`${item}\`\``).join(', ')}`
           )
         : false;
       await channel.send(helpEmbed);

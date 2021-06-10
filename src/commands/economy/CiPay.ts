@@ -37,7 +37,7 @@ export default class SendCommand extends CiCommand {
           index: 2,
           id: 'receiver',
           match: 'content',
-          type: 'CiMembers',
+          type: 'CiMembersAuthor',
         },
       ],
     });
@@ -52,7 +52,7 @@ export default class SendCommand extends CiCommand {
     }: {
       count: number;
       valueType: string;
-      receiver: GuildMember | GuildMember[];
+      receiver: GuildMember | GuildMember[] | string; // Сд
     }
   ): Promise<Message> {
     if (!receiver || !valueType || !count)
@@ -60,6 +60,20 @@ export default class SendCommand extends CiCommand {
     count = Math.round(count);
     const positive = count > 0;
     count = Math.abs(count);
+    if (typeof receiver === 'string') {
+      if (member.voice && receiver === 'channel') {
+        channel.send(
+          new CiEmbed().info(
+            'Вы находитесь не в канале!',
+            null,
+            'Вы использовали аргумент зависимый от нахождения в канале!'
+          )
+        );
+        return;
+      }
+      receiver = member.voice.channel.members.array();
+    }
+
     switch (valueType) {
       case guild.economy.emoji:
         if (Array.isArray(receiver)) {
@@ -69,7 +83,7 @@ export default class SendCommand extends CiCommand {
             }).length != receiver.length &&
             !positive
           )
-            return channel.send(new CiEmbed().errorCommandValue(this.prefix));
+            return channel.send(new CiEmbed().errorCommandEconomyValue(this.prefix));
 
           receiver.forEach((recMember) => {
             if (positive) {
@@ -105,7 +119,7 @@ export default class SendCommand extends CiCommand {
             quoting: messages.pay_currency.randomitem(),
           };
 
-          if (receiver) {
+          if (positive) {
             await receiver.economyController.add(count, embAction.header);
             await channel.send(
               new CiEmbed().info(
@@ -116,8 +130,18 @@ export default class SendCommand extends CiCommand {
               )
             );
           } else {
-            await receiver.economyController.remove(count, embAction.header);
-            await channel.send(new CiEmbed().errorCommandValue(this.prefix));
+            if (await receiver.economyController.remove(count, embAction.header)) {
+              await channel.send(
+                new CiEmbed().info(
+                  'Уведомление!',
+                  embAction.header,
+                  embAction.quoting.text,
+                  embAction.quoting.author
+                )
+              );
+            } else {
+              await channel.send(new CiEmbed().errorCommandEconomyValue(this.prefix));
+            }
           }
         }
         break;

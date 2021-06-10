@@ -1,9 +1,9 @@
 {
   "type": "postgres",
   "host": "localhost",
-  "port": 5433,
+  "port": 5432,
   "username": "postgres",
-  "password": "vfrcbv01231",
+  "password": "admin",
   "database": "CiBot",
   "entities": ["build/database/entity/**/*.js"],
   "migrations": ["build/database/migration/**/*.js"],

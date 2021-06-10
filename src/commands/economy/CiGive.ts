@@ -38,7 +38,7 @@ export default class giveCommand extends CiCommand {
         {
           index: 2,
           id: 'receiver',
-          match: 'content',
+          match: 'rest',
           type: 'CiMembers',
         },
       ],
@@ -62,12 +62,12 @@ export default class giveCommand extends CiCommand {
 
     count = Math.round(count);
     const positive = count > 0;
-    count = positive ? count : -count;
+    count = Math.abs(count);
     switch (valueType) {
       case guild.economy.emoji:
         if (Array.isArray(receiver)) {
           if (member.economyController.sparkCount < receiver.length * count)
-            return channel.send(new CiEmbed().errorCommandValue(this.prefix));
+            return channel.send(new CiEmbed().errorCommandEconomyValue(this.prefix));
           receiver.forEach((recMember) => {
             const action = `Передача ${count} ${valueType} от ${member.displayName}, к ${recMember.displayName}`;
             member.economyController.send(count, recMember, action);
@@ -75,7 +75,7 @@ export default class giveCommand extends CiCommand {
 
           const embAction = {
             header: `${member.displayName} передал ${receiver.length} пользователям, по ${count} ${valueType}!`,
-            quoting: messages.pay_currency[randomInt(0, messages.pay_currency.length)],
+            quoting: messages.send_currency[randomInt(0, messages.pay_currency.length)],
           };
 
           channel.send(
@@ -89,23 +89,25 @@ export default class giveCommand extends CiCommand {
         } else {
           const embAction = {
             header: `Передача ${count} ${valueType} от ${member.displayName}, к ${receiver.displayName}`,
-            quoting: messages.pay_currency[randomInt(0, messages.pay_currency.length)],
+            quoting: messages.send_currency.randomitem(),
           };
           const boolAboutSend = await member.economyController.send(
             count,
             receiver,
             embAction.header
           );
-          boolAboutSend
-            ? await channel.send(
-                new CiEmbed().info(
-                  'Уведомление!',
-                  embAction.header,
-                  embAction.quoting.text,
-                  embAction.quoting.author
-                )
+          if (boolAboutSend) {
+            return channel.send(
+              new CiEmbed().info(
+                'Уведомление!',
+                embAction.header,
+                embAction.quoting.text,
+                embAction.quoting.author
               )
-            : await channel.send(new CiEmbed().errorCommandValue(this.prefix));
+            );
+          } else {
+            return channel.send(new CiEmbed().errorCommandEconomyValue(this.prefix));
+          }
         }
         break;
 

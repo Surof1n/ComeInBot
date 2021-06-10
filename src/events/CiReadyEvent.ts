@@ -1,6 +1,8 @@
 import { CiCommand, CiListener } from '@akairo';
-import { GuildEntity, MemberEntity } from '@entity';
+import { GuildEntity, MemberEntity, TransferReactionEntity } from '@entity';
 import { mainGuildId } from '@typings';
+import { TextChannel } from 'discord.js';
+import { CiTimeout } from '../utils';
 
 export default class ReadyEvent extends CiListener {
   constructor() {
@@ -11,13 +13,6 @@ export default class ReadyEvent extends CiListener {
   }
 
   async exec() {
-    const allEntityMembers = await MemberEntity.find();
-    const allEntityGuilds = await GuildEntity.find();
-    this.client.guilds.cache.forEach((guild) => {
-      guild.init(allEntityGuilds.find((entityGuild) => entityGuild.id === guild.id));
-      guild.members.cache.forEach((member) => {
-        member.init(allEntityMembers.find((entityMember) => entityMember.id === member.id));
-      });
-    });
+    await this.client.initData();
   }
 }

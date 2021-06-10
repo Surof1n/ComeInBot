@@ -18,9 +18,11 @@
       "@akairo": ["src/akairostructures"],
       "@structures": ["src/structures"],
       "@entity": ["src/database/entity"],
+      "@decorators": ["src/decorators"],
       "@controllers": ["src/controllers"],
       "@resources": ["src/resources"],
-      "@typings": ["src/typings"]
+      "@typings": ["src/typings"],
+      "@utils": ["src/utils"]
     }
   },
   "include": ["src", "*/*", "*/*/*"],
