@@ -1,5 +1,5 @@
 import { PrefixSupplier } from 'discord-akairo';
-import { MessageEmbedOptions, MessageEmbed } from 'discord.js';
+import { GuildMember, MessageEmbed, MessageEmbedOptions, TextChannel } from 'discord.js';
 import { Colors, Icons } from '../config';
 
 export class CiEmbed extends MessageEmbed {
@@ -40,7 +40,7 @@ export class CiEmbed extends MessageEmbed {
 
   public errorCommand(prefix: string | string[] | PrefixSupplier) {
     return this.error(
-      'Ошибка! Возможно, команда введена неправильно.',
+      'Ошибка! Команда введена неправильно.',
       null,
       `**Ознакомтесь с командой:**\nВведите ${prefix}help`,
       `В случае повторной ошибки обратитесь к администратору.`
@@ -48,19 +48,35 @@ export class CiEmbed extends MessageEmbed {
   }
 
   public errorCommandEconomyValue(prefix: string | string[] | PrefixSupplier) {
-    return this.error(
-      'Ошибка! Возможно, нехватает валюты.',
+    return this.info(
+      'Вам нехватает валюты для покупки!',
       null,
       `**Ознакомтесь с командой:**\nВведите ${prefix}help`,
       `В случае повторной ошибки обратитесь к администратору.`
     );
   }
+  public errorRoleReactEconomyValue() {
+    return this.info(
+      'Вам нехватает валюты для покупки!',
+      null,
+      null,
+      `В случае повторной ошибки обратитесь к администратору.`
+    );
+  }
   public errorCommandValue(prefix: string | string[] | PrefixSupplier) {
     return this.error(
-      'Ошибка! Возможно, вы ввели неправильный параметр команды.',
+      'Ошибка! Неправильный параметр команды.',
       null,
       `**Ознакомтесь с командой:**\nВведите ${prefix}help`,
       `В случае повторной ошибки обратитесь к администратору.`
+    );
+  }
+
+  public reportMessageSpam(memberName: GuildMember, channelName: TextChannel) {
+    return this.info(
+      'Выдано нарушение!',
+      null,
+      `Пользователь ${memberName} выслал более 5 сообщений за 5 секунд, канал: ${channelName} сообщения:`
     );
   }
 }

@@ -1,15 +1,21 @@
-import { Message, GuildMember } from 'discord.js';
 import { CiEmbed } from '@structures';
 import { messages } from '@resources';
 import { randomInt } from 'crypto';
 import { CiCommand } from '@akairo';
-import { Guild } from 'discord.js';
-import { Channel } from 'discord.js';
-import { GuildEntity } from '@entity';
-import { TextChannel } from 'discord.js';
-import { Role } from 'discord.js';
-import { Emoji } from 'discord.js';
-import { GuildEmoji } from 'discord.js';
+import {
+  Message,
+  GuildMember,
+  Guild,
+  Channel,
+  TextChannel,
+  Role,
+  Emoji,
+  GuildEmoji,
+} from 'discord.js';
+import { GuildEntity, TransferReactionEntity } from '@entity';
+import { ReactTransferTypes } from 'src/config';
+
+const CUSTOM_EMOJI_REGEX = /<(?:.*)?:(\w+):(\d+)>/;
 
 export default class GuildCommandRoleReaction extends CiCommand {
   constructor() {
@@ -35,28 +41,11 @@ export default class GuildCommandRoleReaction extends CiCommand {
         },
         {
           index: 3,
-          id: 'secondsForRole',
-          type: (message: Message, timeExpr: string) => {
-            const units = { h: 3600, m: 60, s: 1 };
-            const regex = /(\d+)([hms])/g;
-
-            let seconds = 0;
-            let match: RegExpExecArray;
-            while ((match = regex.exec(timeExpr))) {
-              if (match[2] == 'h' || match[2] == 'm' || match[2] == 's') {
-                seconds += parseInt(match[1]) * units[match[2]];
-              }
-            }
-            return seconds;
-          },
-        },
-        {
-          index: 4,
           id: 'costroleToReact',
           type: 'number',
         },
         {
-          index: 5,
+          index: 4,
           id: 'typecostroleToReact',
           type: 'string',
         },
@@ -67,21 +56,90 @@ export default class GuildCommandRoleReaction extends CiCommand {
   async exec(
     { member, channel, guild }: Message,
     {
-      messageToReact,
-      guildroleToReact,
+      messageToReact: message,
+      guildroleToReact: reactRole,
       reactToGive,
-      secondsForRole,
-      costroleToReact,
+      costroleToReact: costRole,
       typecostroleToReact,
     }: {
       messageToReact: Message;
       guildroleToReact: Role;
-      reactToGive: GuildEmoji;
-      secondsForRole: number;
+      reactToGive: string;
       costroleToReact: number;
-      typecostroleToReact: number;
+      typecostroleToReact: string;
     }
   ): Promise<void> {
+    if (!message || !reactRole || !reactToGive) {
+      channel.send(new CiEmbed().errorCommand(this.prefix));
+      return;
+    }
+    if (!costRole || !typecostroleToReact) {
+      typecostroleToReact = null;
+      costRole = null;
+    }
+    const matchReact = reactToGive.emojimatcher();
+
+    if (matchReact === guild.reputation.emoji.emojimatcher()) {
+      message.channel.send(
+        new CiEmbed().error(
+          'Ошибка! Не используйте эмодзи теплоты!',
+          null,
+          `Данная ${guild.reputation.emoji} используется для системы репутации!`
+        )
+      );
+      return;
+    }
+    if (
+      typecostroleToReact != guild.economy.emoji &&
+      typecostroleToReact != guild.donate.emoji &&
+      typecostroleToReact != null
+    ) {
+      channel.send(new CiEmbed().errorCommand(this.prefix));
+      return;
+    }
+
+    const matchEmojiTypeCost = typecostroleToReact
+      ? typecostroleToReact.emojimatcher()
+      : typecostroleToReact;
+
+    const findTransfer = await TransferReactionEntity.findOne({
+      react: matchReact,
+      roleId: reactRole.id,
+      messageId: message.id,
+    });
+
+    if (findTransfer) {
+      channel.send(
+        new CiEmbed().error(
+          'Ошибка в создании выдаваемой роли!',
+          null,
+          'Такая выдаваемая роль уже созданна'
+        )
+      );
+      return;
+    }
+
+    const reactTransfer = new TransferReactionEntity(
+      message,
+      reactRole,
+      matchReact,
+      costRole,
+      matchEmojiTypeCost
+    );
+    channel.send(
+      new CiEmbed()
+        .info('Создание выдаваемой роли прошло успешно', null, null, null)
+        .addField('На сервере:', guild.name)
+        .addField('Сообщение:', `[Нажми на меня.](${message.url})`)
+        .addField('Роль:', reactRole)
+        .addField('Эмоция:', reactToGive)
+        .addField(
+          'Стоймость и валюта:',
+          `${costRole ? costRole : 'Бесплатно'} ${typecostroleToReact ? typecostroleToReact : ''}`
+        )
+    );
+    message.react(reactToGive);
+    reactTransfer.save();
     return;
   }
 }

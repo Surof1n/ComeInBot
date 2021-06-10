@@ -1,7 +1,15 @@
 import { Guild } from 'discord.js';
 import { GuildMember } from 'discord.js';
 import { TransferTypes } from 'src/config';
-import { BaseEntity, Column, CreateDateColumn, Entity, Index, PrimaryColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  CreateDateColumn,
+  Entity,
+  Index,
+  PrimaryColumn,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class TransferEntity extends BaseEntity {
@@ -13,7 +21,6 @@ export class TransferEntity extends BaseEntity {
     transferCount: number
   ) {
     super();
-    this.transferId = new Date().getTime() + transferMember?.id;
     this.transferMemberId = transferMember?.id;
     this.transferReciverId = transferReciver?.id;
     this.transferGuild = transferGuild?.id;
@@ -21,8 +28,8 @@ export class TransferEntity extends BaseEntity {
     this.transferCount = transferCount;
   }
   @Index()
-  @PrimaryColumn('text')
-  transferId: string;
+  @PrimaryGeneratedColumn()
+  id: string;
 
   @PrimaryColumn('char', { length: 18 })
   transferMemberId: string;
@@ -33,7 +40,7 @@ export class TransferEntity extends BaseEntity {
   @Column('char', { length: 18 })
   transferReciverId: string;
 
-  @Column({ type: 'enum', enum: ['spark', 'penta', 'reputation', 'monthReputation'] })
+  @Column({ type: 'enum', enum: ['spark', 'penta', 'reputation'] })
   transferType: TransferTypes;
 
   @Column('int')

@@ -33,8 +33,24 @@ export default class GuildOptionsCommand extends CiCommand {
     { member, channel, guild }: Message,
     { typeSettings, valueSettings }: { typeSettings: string; valueSettings: string }
   ): Promise<Message> {
-    const newchannel = valueSettings ? guild.channels.cache.get(valueSettings) : null;
+    const newChannel = valueSettings ? guild.channels.cache.get(valueSettings) : null;
+    const newRole = valueSettings ? guild.roles.cache.get(valueSettings) : null;
+    const listOptions = [
+      'logchannel',
+      'createVoiceChannel',
+      'voicePerCount',
+      'msgPerCount',
+      'startRole',
+    ];
     switch (typeSettings) {
+      case 'list':
+        return channel.send(
+          new CiEmbed().info(
+            `Запрос на выдачу параметров`,
+            '',
+            `${listOptions.map((item) => `\`\`${item}\`\``).join(', ')}`
+          )
+        );
       case 'logchannel':
         if (!valueSettings)
           return channel.send(
@@ -44,7 +60,7 @@ export default class GuildOptionsCommand extends CiCommand {
               `Значение параметра у гильдии: <#${guild.options.logchannel}>`
             )
           );
-        if (newchannel?.type != 'text')
+        if (newChannel?.type != 'text')
           return channel.send(
             new CiEmbed().error(
               `Параметр ${typeSettings} не обновлён!`,
@@ -58,7 +74,33 @@ export default class GuildOptionsCommand extends CiCommand {
           new CiEmbed().info(
             `Обновление параметра ${typeSettings}`,
             '',
-            `Значение параметра у гильдии измененно: <#${guild.options.logchannel}>`
+            `Значение параметра у гильдии измененно: ${newChannel}>`
+          )
+        );
+      case 'createVoiceChannel':
+        if (!valueSettings)
+          return channel.send(
+            new CiEmbed().info(
+              `Запрос на выдачу параметра ${typeSettings}`,
+              '',
+              `Значение параметра у гильдии: <#${guild.options.createVoiceChannel}>`
+            )
+          );
+        if (newChannel?.type != 'voice')
+          return channel.send(
+            new CiEmbed().error(
+              `Параметр ${typeSettings} не обновлён!`,
+              '',
+              `Значение параметра у гильдии осталось тем же: <#${guild.options.createVoiceChannel}>`
+            )
+          );
+        guild.options.createVoiceChannel = valueSettings;
+        GuildEntity.update({ id: guild.id }, { options: guild.options });
+        return channel.send(
+          new CiEmbed().info(
+            `Обновление параметра ${typeSettings}`,
+            '',
+            `Значение параметра у гильдии измененно: ${newChannel}`
           )
         );
       case 'voicePerCount':
@@ -113,10 +155,36 @@ export default class GuildOptionsCommand extends CiCommand {
             `Значение параметра у гильдии измененно: ${guild.economy.msgPerCount}`
           )
         );
+      case 'startRole':
+        if (!valueSettings)
+          return channel.send(
+            new CiEmbed().info(
+              `Запрос на выдачу параметра ${typeSettings}`,
+              '',
+              `Значение параметра у гильдии: <@&${guild.options.startRole}>`
+            )
+          );
+        if (!newRole)
+          return channel.send(
+            new CiEmbed().error(
+              `Параметр ${typeSettings} не обновлён!`,
+              '',
+              `Значение параметра у гильдии осталось тем же: <@&${guild.options.startRole}>`
+            )
+          );
+        guild.options.startRole = valueSettings;
+        GuildEntity.update({ id: guild.id }, { options: guild.options });
+        return channel.send(
+          new CiEmbed().info(
+            `Обновление параметра ${typeSettings}`,
+            '',
+            `Значение параметра у гильдии измененно: ${newRole}`
+          )
+        );
       default:
         return channel.send(
           new CiEmbed().error(
-            `Параметр ${typeSettings} не найден!`,
+            `Параметр не найден!`,
             '',
             `Значения параметров у гильдии не изменены.`
           )

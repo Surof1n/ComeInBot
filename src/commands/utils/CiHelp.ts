@@ -26,11 +26,14 @@ export default class HelpCommand extends CiCommand {
     const categoryes = this.client.commandHandler.categories;
     if (command) {
       const parseCommand = this.client.commandHandler.findCommand(command) as CiCommand;
-      if (!parseCommand) return;
+      if (!parseCommand) {
+        channel.send(new CiEmbed().info('Команда не найдёна!'));
+        return;
+      }
       parseCommand.cidescription ? parseCommand.cidescription.initExamples(guild) : false;
       const helpEmbed = new CiEmbed().create(
         `Помощь по модулю ${Categoryes.get(parseCommand.categoryID)}`,
-        `Помощь по команде \`.${parseCommand.id}\``,
+        `Помощь по команде \`${this.prefix}${parseCommand.id}\``,
         null,
         null,
         `${CategoryesIcon.get(parseCommand.category.id)}`
@@ -48,6 +51,12 @@ export default class HelpCommand extends CiCommand {
         ? helpEmbed.addField(
             'Примеры использования:',
             `${parseCommand.cidescription.examples.join('\n')}`
+          )
+        : false;
+      parseCommand.aliases
+        ? helpEmbed.addField(
+            'Иные названия:',
+            `${parseCommand.aliases.map((item) => `\`\`${item}\`\``).join(', ')}`
           )
         : false;
       await channel.send(helpEmbed);

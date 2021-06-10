@@ -1,6 +1,12 @@
-import { EconomyController, PentaController, ReputationController } from '@controllers';
+import {
+  EconomyController,
+  PentaController,
+  ReputationController,
+  TimeController,
+} from '@controllers';
 import { MemberEntity, GuildEntity } from '@entity';
-import { CiGuild } from '@structures';
+import { CiGuild, CiGuildReportsManager, GuildTempChannelsManager } from '@structures';
+import { Snowflake } from 'discord.js';
 import { Guild } from 'discord.js';
 import { Message } from 'discord.js';
 
@@ -9,9 +15,13 @@ declare module 'discord.js' {
     options: CiGuildOptions;
     economy: CiGuildEconomy;
     reputation: CiGuildReputation;
+    donate: CiGuildDonate;
+    tempChannels: GuildTempChannelsManager;
+    report: CiGuildReportsManager;
     init(data: GuildEntity): void;
   }
   interface GuildMember {
+    timeController: TimeController;
     economyController: EconomyController;
     reputationController: ReputationController;
     pentaController: PentaController;
@@ -29,6 +39,9 @@ declare global {
   interface Array<T> {
     randomitem(): T;
   }
+  interface String {
+    emojimatcher(): string;
+  }
 }
 
 export type GuildEmojis = {
@@ -40,7 +53,9 @@ export type GuildEmojis = {
 };
 
 export interface CiGuildOptions {
+  startRole: string;
   logchannel: string;
+  createVoiceChannel: string;
 }
 
 export interface CiDescription {
@@ -59,6 +74,14 @@ export interface CiGuildEconomy {
 
 export interface CiGuildReputation {
   emoji: string;
+}
+
+export interface CiGuildDonate {
+  emoji: string;
+}
+
+export interface CiGuildReport {
+  reportManagers: Snowflake[];
 }
 
 export const mainGuildId = '703977369966346332';

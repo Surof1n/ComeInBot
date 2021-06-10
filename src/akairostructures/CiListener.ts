@@ -6,4 +6,5 @@ import { Guild } from 'discord.js';
 
 export class CiListener extends Listener {
   public client: CiClient;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 }

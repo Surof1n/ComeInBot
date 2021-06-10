@@ -1,5 +1,6 @@
 import { Guild, GuildMember } from 'discord.js';
 import { MemberEntity, TransferEntity } from '@entity';
+import { REASONS } from '../config';
 export class PentaController {
   member: GuildMember;
   guild: Guild;
@@ -24,7 +25,7 @@ export class PentaController {
   }
   async send(sendCount: number, receiverMember: GuildMember, reason: string) {
     if ((await this.remove(sendCount, 'Send Penta')) && this.member.id != receiverMember.id) {
-      receiverMember.economyController.add(sendCount, 'Receivering Penta');
+      receiverMember.economyController.add(sendCount, REASONS.RECEIVERING);
 
       const dataTranfer = new TransferEntity(
         this.member,

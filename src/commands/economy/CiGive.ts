@@ -38,7 +38,7 @@ export default class giveCommand extends CiCommand {
         {
           index: 2,
           id: 'receiver',
-          match: 'content',
+          match: 'rest',
           type: 'CiMembers',
         },
       ],
@@ -89,7 +89,7 @@ export default class giveCommand extends CiCommand {
         } else {
           const embAction = {
             header: `Передача ${count} ${valueType} от ${member.displayName}, к ${receiver.displayName}`,
-            quoting: messages.send_currency[randomInt(0, messages.pay_currency.length)],
+            quoting: messages.send_currency.randomitem(),
           };
           const boolAboutSend = await member.economyController.send(
             count,

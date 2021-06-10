@@ -1,5 +1,11 @@
 import { BaseEntity, Column, Entity, Index, PrimaryColumn } from 'typeorm';
-import { CiGuildOptions, CiGuildEconomy, CiGuildReputation } from '../../typings';
+import {
+  CiGuildOptions,
+  CiGuildEconomy,
+  CiGuildReputation,
+  CiGuildDonate,
+  CiGuildReport,
+} from '@typings';
 
 @Entity()
 export class GuildEntity extends BaseEntity {
@@ -15,4 +21,10 @@ export class GuildEntity extends BaseEntity {
 
   @Column('simple-json')
   reputation: CiGuildReputation;
+
+  @Column('simple-json')
+  donate: CiGuildDonate;
+
+  @Column('simple-json')
+  report: CiGuildReport;
 }

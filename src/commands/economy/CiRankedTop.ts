@@ -11,7 +11,7 @@ export default class HelpCommand extends CiCommand {
     super({
       description: 'справочник по таблице рейтинга',
       category: 'utils',
-      aliases: ['top', 'рейтинг'],
+      aliases: ['top', 'рейтинг', 'топ'],
       args: [
         {
           index: 0,
@@ -36,7 +36,30 @@ export default class HelpCommand extends CiCommand {
       const rankedEmbed =
         rankedTopForEmbed.length > 0
           ? new CiEmbed().create(
-              'Топ по теплоте',
+              'Топ пользователей по теплоте за месяц',
+              null,
+              `${rankedTopForEmbed.join(`\n\n`)}`,
+              null,
+              TopsImages
+            )
+          : new CiEmbed().error('Ошибка в поиске топа', null, `Топа не существует`);
+      await channel.send(rankedEmbed);
+    } else if (ranked === 'теплота-завсёвремя') {
+      const rankedTopForEmbed = guild.members.cache
+        .filter((member) => member.reputationController.allTimeRepValue > 0)
+        .sort(
+          (a, b) => b.reputationController.allTimeRepValue - a.reputationController.allTimeRepValue
+        )
+        .array()
+        .slice(0, 10)
+        .map(
+          (member) =>
+            `${member.reputationController.allTimeRepValue} ${guild.reputation.emoji} - ${member.displayName}`
+        );
+      const rankedEmbed =
+        rankedTopForEmbed.length > 0
+          ? new CiEmbed().create(
+              'Топ пользователей по теплоте за всё время',
               null,
               `${rankedTopForEmbed.join(`\n\n`)}`,
               null,
@@ -57,7 +80,90 @@ export default class HelpCommand extends CiCommand {
       const rankedEmbed =
         rankedTopForEmbed.length > 0
           ? new CiEmbed().create(
-              'Топ по спаркам',
+              'Топ пользователей по количеству спарков',
+              null,
+              `${rankedTopForEmbed.join(`\n\n`)}`,
+              null,
+              TopsImages
+            )
+          : new CiEmbed().error('Ошибка в поиске топа', null, `Топа не существует`);
+      await channel.send(rankedEmbed);
+    } else if (ranked === 'заработанныеспарки') {
+      const rankedTopForEmbed = guild.members.cache
+        .filter((member) => member.economyController.sparkAllTimeCountTop > 0)
+        .sort(
+          (a, b) =>
+            b.economyController.sparkAllTimeCountTop - a.economyController.sparkAllTimeCountTop
+        )
+        .array()
+        .slice(0, 10)
+        .map(
+          (member) =>
+            `${member.economyController.sparkAllTimeCountTop} ${guild.economy.emoji} - ${member.displayName}`
+        );
+      const rankedEmbed =
+        rankedTopForEmbed.length > 0
+          ? new CiEmbed().create(
+              'Топ пользователей по заработанным спаркам за всё время',
+              null,
+              `${rankedTopForEmbed.join(`\n\n`)}`,
+              null,
+              TopsImages
+            )
+          : new CiEmbed().error('Ошибка в поиске топа', null, `Топа не существует`);
+      await channel.send(rankedEmbed);
+    } else if (ranked === 'заработанныеспарки-замесяц') {
+      const rankedTopForEmbed = guild.members.cache
+        .filter((member) => member.economyController.sparkMonthCountTop > 0)
+        .sort(
+          (a, b) => b.economyController.sparkMonthCountTop - a.economyController.sparkMonthCountTop
+        )
+        .array()
+        .slice(0, 10)
+        .map(
+          (member) =>
+            `${member.economyController.sparkMonthCountTop} ${guild.economy.emoji} - ${member.displayName}`
+        );
+      const rankedEmbed =
+        rankedTopForEmbed.length > 0
+          ? new CiEmbed().create(
+              'Топ пользователей по заработанным спаркам за месяц',
+              null,
+              `${rankedTopForEmbed.join(`\n\n`)}`,
+              null,
+              TopsImages
+            )
+          : new CiEmbed().error('Ошибка в поиске топа', null, `Топа не существует`);
+      await channel.send(rankedEmbed);
+    } else if (ranked === 'количество-сообщений') {
+      const rankedTopForEmbed = guild.members.cache
+        .filter((member) => member.economyController.messagesCount > 0)
+        .sort((a, b) => b.economyController.messagesCount - a.economyController.messagesCount)
+        .array()
+        .slice(0, 10)
+        .map((member) => `${member.economyController.messagesCount} - ${member.displayName}`);
+      const rankedEmbed =
+        rankedTopForEmbed.length > 0
+          ? new CiEmbed().create(
+              'Топ пользователей по количеству сообщений',
+              null,
+              `${rankedTopForEmbed.join(`\n\n`)}`,
+              null,
+              TopsImages
+            )
+          : new CiEmbed().error('Ошибка в поиске топа', null, `Топа не существует`);
+      await channel.send(rankedEmbed);
+    } else if (ranked === 'время-вканале') {
+      const rankedTopForEmbed = guild.members.cache
+        .filter((member) => member.timeController.minutesState > 0)
+        .sort((a, b) => b.timeController.minutesState - a.timeController.minutesState)
+        .array()
+        .slice(0, 10)
+        .map((member) => `${member.timeController.minutesState} - ${member.displayName}`);
+      const rankedEmbed =
+        rankedTopForEmbed.length > 0
+          ? new CiEmbed().create(
+              'Топ пользователей по времени в канале',
               null,
               `${rankedTopForEmbed.join(`\n\n`)}`,
               null,

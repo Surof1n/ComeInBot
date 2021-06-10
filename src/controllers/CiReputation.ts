@@ -26,7 +26,7 @@ export class ReputationController {
       return false;
     }
     receiverMember.reputationController.count += 1;
-    receiverMember.reputationController.rankedCount = receiverMember.reputationController.count;
+    receiverMember.reputationController.rankedCount += 1;
     MemberEntity.update(
       { id: receiverMember.id },
       {
@@ -56,5 +56,8 @@ export class ReputationController {
   }
   get repValue(): number {
     return this.count;
+  }
+  get allTimeRepValue(): number {
+    return this.rankedCount;
   }
 }
