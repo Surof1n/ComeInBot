@@ -38,15 +38,6 @@ export class CiEmbed extends MessageEmbed {
     return this.create(author, header, description, footer, Icons.info).setColor(Colors.Blue);
   }
 
-  public errorCommand(prefix: string | string[] | PrefixSupplier) {
-    return this.error(
-      'Ошибка! Команда введена неправильно.',
-      null,
-      `**Ознакомтесь с командой:**\nВведите ${prefix}help`,
-      `В случае повторной ошибки обратитесь к администратору.`
-    );
-  }
-
   public errorCommandEconomyValue(prefix: string | string[] | PrefixSupplier) {
     return this.info(
       'Вам нехватает валюты для покупки!',
@@ -67,6 +58,14 @@ export class CiEmbed extends MessageEmbed {
     return this.error(
       'Ошибка! Неправильный параметр команды.',
       null,
+      `**Ознакомтесь с командой:**\nВведите ${prefix}help`,
+      `В случае повторной ошибки обратитесь к администратору.`
+    );
+  }
+  public errorCommandValueReason(prefix: string | string[] | PrefixSupplier, reason: string) {
+    return this.error(
+      'Ошибка! Неправильный параметр команды.',
+      reason,
       `**Ознакомтесь с командой:**\nВведите ${prefix}help`,
       `В случае повторной ошибки обратитесь к администратору.`
     );

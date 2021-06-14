@@ -27,17 +27,20 @@ export default class SendCommand extends CiCommand {
           index: 0,
           id: 'count',
           type: 'number',
+          name: 'количество',
         },
         {
           index: 1,
           id: 'valueType',
           type: 'string',
+          name: 'тип',
         },
         {
           index: 2,
           id: 'receiver',
           match: 'content',
           type: 'CiMembersAuthor',
+          name: 'пользователи',
         },
       ],
     });
@@ -56,12 +59,12 @@ export default class SendCommand extends CiCommand {
     }
   ): Promise<Message> {
     if (!receiver || !valueType || !count)
-      return channel.send(new CiEmbed().errorCommand(this.prefix));
+      return channel.send(new CiEmbed().errorCommandValue(this.prefix));
     count = Math.round(count);
     const positive = count > 0;
     count = Math.abs(count);
     if (typeof receiver === 'string') {
-      if (member.voice && receiver === 'channel') {
+      if (member.voice?.channel && receiver === 'channel') {
         channel.send(
           new CiEmbed().info(
             'Вы находитесь не в канале!',
@@ -147,7 +150,7 @@ export default class SendCommand extends CiCommand {
         break;
 
       default:
-        return channel.send(new CiEmbed().errorCommand(this.prefix));
+        return channel.send(new CiEmbed().errorCommandValue(this.prefix));
         break;
     }
   }

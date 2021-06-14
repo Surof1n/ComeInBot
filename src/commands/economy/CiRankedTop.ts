@@ -18,6 +18,7 @@ export default class HelpCommand extends CiCommand {
           type: 'string',
           id: 'ranked',
           default: null,
+          name: 'вид топа',
         },
       ],
     });

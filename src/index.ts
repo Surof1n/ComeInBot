@@ -1,12 +1,9 @@
 import 'module-alias/register';
-import { Structures } from 'discord.js';
-import { createConnection } from 'typeorm';
 import 'reflect-metadata';
 import { CiClient, CiGuild, CiGuildMember } from '@structures';
-import moment from 'moment';
-import { TextChannel } from 'discord.js';
-import { GuildEntity, MemberEntity, TransferReactionEntity } from '@entity';
-import { CiTimeout } from '@utils';
+import { Structures } from 'discord.js';
+import { createConnection } from 'typeorm';
+import { emojis } from '@resources';
 
 Structures.extend('Guild', () => CiGuild);
 
@@ -17,10 +14,12 @@ Array.prototype.randomitem = function () {
 };
 
 String.prototype.emojimatcher = function () {
+  const standEmoji = emojis[this] as string | undefined;
+  if (standEmoji) return this;
   const CUSTOM_EMOJI_REGEX = /<(?:.*)?:(\w+):(\d+)>/;
   return this.match(CUSTOM_EMOJI_REGEX)
     ? this.match(CUSTOM_EMOJI_REGEX).slice(1, 3).join(':')
-    : this;
+    : null;
 };
 
 async function run() {

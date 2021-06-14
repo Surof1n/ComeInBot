@@ -21,7 +21,7 @@ export default class ReactionAddEvent extends CiListener {
       (member) => member.id == userReaction.id
     );
 
-    if (message.author.bot || userReaction.bot) return;
+    if (userReaction.bot) return;
 
     const matchEmoji = emoji.toString().emojimatcher();
 
@@ -30,7 +30,7 @@ export default class ReactionAddEvent extends CiListener {
       react: matchEmoji,
       guildId: message.guild.id,
     });
-
+    if (memberReaction.roles.cache.get(emojiRoleTransfer?.roleId)) return;
     if (emojiRoleTransfer) {
       const economyEmoji = message.guild.economy.emoji.emojimatcher();
       const pentaEmoji = message.guild.donate.emoji.emojimatcher();
@@ -71,7 +71,7 @@ export default class ReactionAddEvent extends CiListener {
     }
     if (
       memberReaction.id === message.author.id &&
-      emoji.toString() === message.guild.reputation.emoji
+      emoji.toString().emojimatcher() === message.guild.reputation.emoji.toString().emojimatcher()
     ) {
       const finallyMessage = await message.channel.send(
         new CiEmbed().error('Ошибка!', null, `Вы не можете подарить теплоту себе!`)
@@ -81,7 +81,7 @@ export default class ReactionAddEvent extends CiListener {
       return;
     }
 
-    if (emoji.toString() === message.guild.reputation.emoji) {
+    if (emoji.toString() === message.guild.reputation.emoji && !message.author.bot) {
       const infoEmbed = {
         title: `${memberReaction.displayName} дарит теплоту ${message.member.displayName}`,
         randomText: messages.rep_given.randomitem(),

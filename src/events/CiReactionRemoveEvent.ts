@@ -35,13 +35,13 @@ export default class ReactionRemoveEvent extends CiListener {
         await remove();
       }
     }
-    if (message.author.bot || userReaction.bot) return;
+    if (userReaction.bot) return;
 
     if (emojiRoleTransfer) {
       const reactRoleEmbed = new CiEmbed().success(
         'Снятие роли!',
         null,
-        'Вы повторно нажали на реакцию, роль удаленна!'
+        'Вы повторно нажали на реакцию, роль удалена!'
       );
       memberReaction.roles.remove(emojiRoleTransfer.roleId);
       message.channel.send(reactRoleEmbed);

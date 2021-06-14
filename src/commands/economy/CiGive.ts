@@ -1,9 +1,7 @@
-import { Message, GuildMember } from 'discord.js';
-import { CiEmbed } from '@structures';
-import { messages } from '@resources';
-import { randomInt } from 'crypto';
 import { CiCommand } from '@akairo';
-import { Guild } from 'discord.js';
+import { messages } from '@resources';
+import { CiEmbed } from '@structures';
+import { Guild, GuildMember, Message } from 'discord.js';
 
 export default class giveCommand extends CiCommand {
   constructor() {
@@ -29,17 +27,20 @@ export default class giveCommand extends CiCommand {
           index: 0,
           id: 'count',
           type: 'number',
+          name: 'количество',
         },
         {
           index: 1,
           id: 'valueType',
           type: 'string',
+          name: 'тип',
         },
         {
           index: 2,
           id: 'receiver',
           match: 'rest',
           type: 'CiMembers',
+          name: 'пользователи',
         },
       ],
     });
@@ -58,7 +59,7 @@ export default class giveCommand extends CiCommand {
     }
   ): Promise<Message> {
     if (!receiver || !valueType || !count)
-      return channel.send(new CiEmbed().errorCommand(this.prefix));
+      return channel.send(new CiEmbed().errorCommandValue(this.prefix));
 
     count = Math.round(count);
     const positive = count > 0;
@@ -68,6 +69,7 @@ export default class giveCommand extends CiCommand {
         if (Array.isArray(receiver)) {
           if (member.economyController.sparkCount < receiver.length * count)
             return channel.send(new CiEmbed().errorCommandEconomyValue(this.prefix));
+
           receiver.forEach((recMember) => {
             const action = `Передача ${count} ${valueType} от ${member.displayName}, к ${recMember.displayName}`;
             member.economyController.send(count, recMember, action);
@@ -75,7 +77,7 @@ export default class giveCommand extends CiCommand {
 
           const embAction = {
             header: `${member.displayName} передал ${receiver.length} пользователям, по ${count} ${valueType}!`,
-            quoting: messages.send_currency[randomInt(0, messages.pay_currency.length)],
+            quoting: messages.send_currency.randomitem(),
           };
 
           channel.send(
@@ -112,7 +114,7 @@ export default class giveCommand extends CiCommand {
         break;
 
       default:
-        return channel.send(new CiEmbed().errorCommand(this.prefix));
+        return channel.send(new CiEmbed().errorCommandValue(this.prefix));
         break;
     }
   }

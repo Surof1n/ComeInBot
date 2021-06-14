@@ -3,37 +3,61 @@ import { CiGuildReport } from '@typings';
 import { Guild, GuildMember } from 'discord.js';
 
 export class CiGuildReportsManager {
-  private options: CiGuildReport;
+  public options: CiGuildReport;
   private guild: Guild;
   private _reportManagers: GuildMember[];
+  private _memberHasReport: GuildMember[];
   constructor(guild: Guild, guildReportOption: CiGuildReport) {
     this.options = guildReportOption;
     this.guild = guild;
     this._reportManagers = guildReportOption.reportManagers.map((item) => guild.member(item));
+    this._memberHasReport = guildReportOption.memberHasReport.map((item) => guild.member(item));
   }
 
-  async addMember(member: GuildMember) {
+  async addManager(member: GuildMember) {
     if (!member) return false;
     const guildEntity = await GuildEntity.findOne({ id: this.guild.id });
     this._reportManagers.push(member);
-    guildEntity.report.reportManagers = this.membersID;
+    guildEntity.report.reportManagers = this.managersID;
     await guildEntity.save();
   }
-  async removeMember(member: GuildMember) {
+  async removeManager(member: GuildMember) {
     if (!member) return false;
     const guildEntity = await GuildEntity.findOne({ id: this.guild.id });
     this._reportManagers = this._reportManagers.filter((item) => item.id !== member.id);
-    guildEntity.report.reportManagers = this.membersID;
+    guildEntity.report.reportManagers = this.managersID;
     await guildEntity.save();
   }
-  get membersID() {
+  async addReport(member: GuildMember) {
+    if (!member) return false;
+    const guildEntity = await GuildEntity.findOne({ id: this.guild.id });
+    this._memberHasReport.push(member);
+    guildEntity.report.memberHasReport = this.membersHasReportID;
+    await guildEntity.save();
+  }
+  async removeReport(member: GuildMember) {
+    if (!member) return false;
+    const guildEntity = await GuildEntity.findOne({ id: this.guild.id });
+    this._memberHasReport = this._memberHasReport.filter((item) => item.id !== member.id);
+    guildEntity.report.memberHasReport = this.membersHasReportID;
+    await guildEntity.save();
+  }
+  get managersID() {
     return this._reportManagers.map((item) => item.id);
   }
-
-  hasMember(member: GuildMember) {
+  get membersHasReportID() {
+    return this._memberHasReport.map((item) => item.id);
+  }
+  hasManager(member: GuildMember) {
     return this._reportManagers.includes(member);
+  }
+  memberHasReport(member: GuildMember) {
+    return this._memberHasReport.includes(member);
   }
   get reportManagers() {
     return this._reportManagers;
+  }
+  get membersHasReport() {
+    return this._memberHasReport;
   }
 }

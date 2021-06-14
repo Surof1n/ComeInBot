@@ -13,11 +13,13 @@ export default class ReportManagers extends CiCommand {
           index: 0,
           id: 'action',
           type: 'text',
+          name: 'действие',
         },
         {
           index: 1,
           id: 'reportManager',
           type: 'member',
+          name: 'пользователь',
         },
       ],
     });
@@ -33,7 +35,7 @@ export default class ReportManagers extends CiCommand {
       return;
     }
     if (action === 'add') {
-      if (guild.report.hasMember(reportManager)) {
+      if (guild.report.hasManager(reportManager)) {
         channel.send(
           new CiEmbed().info(
             'Новый репорт менеджер не добавлен',
@@ -43,7 +45,7 @@ export default class ReportManagers extends CiCommand {
         );
         return;
       }
-      guild.report.addMember(reportManager);
+      guild.report.addManager(reportManager);
       channel.send(
         new CiEmbed().success(
           'Новый репорт менеджер был добавлен!',
@@ -53,7 +55,7 @@ export default class ReportManagers extends CiCommand {
       );
       return;
     } else if (action === 'remove') {
-      if (!guild.report.hasMember(reportManager)) {
+      if (!guild.report.hasManager(reportManager)) {
         channel.send(
           new CiEmbed().info(
             'Репорт менеджен не удалён',
@@ -63,7 +65,7 @@ export default class ReportManagers extends CiCommand {
         );
         return;
       }
-      guild.report.removeMember(reportManager);
+      guild.report.removeManager(reportManager);
       channel.send(
         new CiEmbed().success(
           'Репорт менеджер был удалён!',

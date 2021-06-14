@@ -1,4 +1,4 @@
-import { CiCommand } from '@akairo';
+import { CiCommand, CiCommandHandler } from '@akairo';
 import { GuildEntity, MemberEntity, TransferReactionEntity } from '@entity';
 import { CiTimeout } from '@utils';
 import { AkairoClient, CommandHandler, InhibitorHandler, ListenerHandler } from 'discord-akairo';
@@ -10,17 +10,17 @@ import { join } from 'path';
 import { CiOptions } from '../config';
 
 export class CiClient extends AkairoClient {
-  commandHandler: CommandHandler;
+  commandHandler: CiCommandHandler;
   eventHandler: ListenerHandler;
   inhibitorHandler: InhibitorHandler;
 
   constructor() {
     super({
       disableMentions: 'everyone',
-      messageCacheMaxSize: 100,
+      messageCacheMaxSize: 300,
     });
 
-    this.commandHandler = new CommandHandler(this, {
+    this.commandHandler = new CiCommandHandler(this, {
       directory: join(__dirname, '..', 'commands'),
       prefix: CiOptions.prefix,
     });
@@ -107,21 +107,25 @@ export class CiClient extends AkairoClient {
         const allEntityMembers = await MemberEntity.find();
         const allEntityGuilds = await GuildEntity.find();
         const allEntityReactTransfer = await TransferReactionEntity.find();
-        const reactingMessages = allEntityReactTransfer.map((transfer) => transfer.messageId);
-        this.guilds.cache.forEach((guild) => {
+        for await (const guild of this.guilds.cache.array()) {
           guild.init(allEntityGuilds.find((entityGuild) => entityGuild.id === guild.id));
-          guild.members.cache.forEach((member) => {
+
+          for await (const member of guild.members.cache.array()) {
             member.init(allEntityMembers.find((entityMember) => entityMember.id === member.id));
-          });
-          guild.channels.cache.forEach((channel) => {
-            if (channel instanceof TextChannel) {
-              reactingMessages.forEach((messageid) => {
-                channel.messages.fetch(messageid).catch((e) => e);
-              });
-            }
-          });
+          }
+
+          for await (const reactEntityItem of allEntityReactTransfer) {
+            const fChannel = guild.channels.cache.get(
+              reactEntityItem.channelMessageId
+            ) as TextChannel;
+            fChannel.messages
+              .fetch(reactEntityItem.messageId)
+              .then((m) => console.log('Fetching success', m.id))
+              .catch((e) => console.log(e));
+          }
+
           new CiTimeout()._init(this, guild);
-        });
+        }
         console.log('Connect Come In Resources 🔥🔥🔥');
       }, 1000);
     });

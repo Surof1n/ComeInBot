@@ -15,6 +15,7 @@ export default class KickTempChannelCommand extends CiCommand {
           index: 0,
           id: 'kickMember',
           type: 'member',
+          name: 'пользователь',
         },
       ],
     });

@@ -16,6 +16,7 @@ export default class addCoOwnerTempChannelCommand extends CiCommand {
           index: 0,
           id: 'newOwnerMember',
           type: 'member',
+          name: 'пользователь',
         },
       ],
     });

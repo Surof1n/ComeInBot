@@ -13,6 +13,7 @@ export default class LimitTempChannelCommand extends CiCommand {
           index: 0,
           id: 'state',
           type: 'string',
+          name: 'состояние',
         },
       ],
     });

@@ -16,6 +16,7 @@ export default class removeCoOwnerTempChannelCommand extends CiCommand {
           index: 0,
           id: 'adminMember',
           type: 'member',
+          name: 'пользователь',
         },
       ],
     });

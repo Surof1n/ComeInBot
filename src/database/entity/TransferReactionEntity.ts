@@ -6,6 +6,7 @@ export class TransferReactionEntity extends BaseEntity {
   constructor(message: Message, role: Role, react: string, cost: number, type: string) {
     super();
     this.messageId = message?.id;
+    this.channelMessageId = message?.channel?.id;
     this.guildId = message?.guild?.id;
     this.roleId = role?.id;
     this.react = react;
@@ -17,6 +18,9 @@ export class TransferReactionEntity extends BaseEntity {
 
   @Column('char', { length: 18 })
   messageId: string;
+
+  @Column('char', { length: 18 })
+  channelMessageId: string;
 
   @Column('char', { length: 18 })
   guildId: string;

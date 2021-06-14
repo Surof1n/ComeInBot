@@ -1,15 +1,14 @@
 /* eslint-disable no-unused-vars */
-import * as dotenv from 'dotenv';
-import { type } from 'node:os';
-import { join } from 'path';
 import {
-  CiGuildOptions,
-  CiGuildEconomy,
-  GuildEmojis,
-  CiGuildReputation,
   CiGuildDonate,
+  CiGuildEconomy,
+  CiGuildOptions,
   CiGuildReport,
+  CiGuildReputation,
+  GuildEmojis,
 } from '@typings';
+import * as dotenv from 'dotenv';
+import { join } from 'path';
 dotenv.config({ path: join(__dirname, '..', '.env') });
 
 export const CiOptions = {
@@ -44,6 +43,8 @@ export const CiGuildOptionsDonate: CiGuildDonate = {
 
 export const CiGuildReportOptions: CiGuildReport = {
   reportManagers: [],
+  memberHasReport: [],
+  reportRoleID: '717056503206379552',
 };
 
 export enum Icons {

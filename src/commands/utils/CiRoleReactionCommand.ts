@@ -1,19 +1,7 @@
-import { CiEmbed } from '@structures';
-import { messages } from '@resources';
-import { randomInt } from 'crypto';
 import { CiCommand } from '@akairo';
-import {
-  Message,
-  GuildMember,
-  Guild,
-  Channel,
-  TextChannel,
-  Role,
-  Emoji,
-  GuildEmoji,
-} from 'discord.js';
-import { GuildEntity, TransferReactionEntity } from '@entity';
-import { ReactTransferTypes } from 'src/config';
+import { TransferReactionEntity } from '@entity';
+import { CiEmbed } from '@structures';
+import { Message, NewsChannel, Role, TextChannel } from 'discord.js';
 
 const CUSTOM_EMOJI_REGEX = /<(?:.*)?:(\w+):(\d+)>/;
 
@@ -28,25 +16,30 @@ export default class GuildCommandRoleReaction extends CiCommand {
           index: 0,
           id: 'messageToReact',
           type: 'guildMessage',
+          name: 'сообщение',
         },
         {
           index: 1,
           id: 'guildroleToReact',
           type: 'role',
+          name: 'роль',
         },
         {
           index: 2,
           id: 'reactToGive',
           type: 'string',
+          name: 'реакция',
         },
         {
           index: 3,
           id: 'costroleToReact',
           type: 'number',
+          name: 'стоимость',
         },
         {
           index: 4,
           id: 'typecostroleToReact',
+          name: 'тип стоимости',
           type: 'string',
         },
       ],
@@ -70,15 +63,30 @@ export default class GuildCommandRoleReaction extends CiCommand {
     }
   ): Promise<void> {
     if (!message || !reactRole || !reactToGive) {
-      channel.send(new CiEmbed().errorCommand(this.prefix));
+      channel.send(new CiEmbed().errorCommandValue(this.prefix));
       return;
     }
-    if (!costRole || !typecostroleToReact) {
-      typecostroleToReact = null;
-      costRole = null;
+    if ((!costRole && typecostroleToReact) || (costRole && !typecostroleToReact)) {
+      channel.send(
+        new CiEmbed().errorCommandValueReason(this.prefix, 'Впишите стоимость и тип валюты вместе')
+      );
+      return;
     }
+    const matchEmojiTypeCost = typecostroleToReact
+      ? typecostroleToReact.emojimatcher()
+      : typecostroleToReact;
     const matchReact = reactToGive.emojimatcher();
 
+    if (!matchReact) {
+      channel.send(
+        new CiEmbed().error(
+          'Ошибка в создании выдаваемой роли!',
+          null,
+          'Эмодзи для использования отсутствует'
+        )
+      );
+      return;
+    }
     if (matchReact === guild.reputation.emoji.emojimatcher()) {
       message.channel.send(
         new CiEmbed().error(
@@ -89,18 +97,6 @@ export default class GuildCommandRoleReaction extends CiCommand {
       );
       return;
     }
-    if (
-      typecostroleToReact != guild.economy.emoji &&
-      typecostroleToReact != guild.donate.emoji &&
-      typecostroleToReact != null
-    ) {
-      channel.send(new CiEmbed().errorCommand(this.prefix));
-      return;
-    }
-
-    const matchEmojiTypeCost = typecostroleToReact
-      ? typecostroleToReact.emojimatcher()
-      : typecostroleToReact;
 
     const findTransfer = await TransferReactionEntity.findOne({
       react: matchReact,
@@ -118,7 +114,6 @@ export default class GuildCommandRoleReaction extends CiCommand {
       );
       return;
     }
-
     const reactTransfer = new TransferReactionEntity(
       message,
       reactRole,
@@ -140,6 +135,7 @@ export default class GuildCommandRoleReaction extends CiCommand {
     );
     message.react(reactToGive);
     reactTransfer.save();
+    message.fetch();
     return;
   }
 }

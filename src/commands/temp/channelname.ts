@@ -13,6 +13,7 @@ export default class NameTempChannelCommand extends CiCommand {
           index: 0,
           id: 'newNameChannel',
           type: 'string',
+          name: 'имя',
         },
       ],
     });

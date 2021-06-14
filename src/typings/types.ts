@@ -4,11 +4,9 @@ import {
   ReputationController,
   TimeController,
 } from '@controllers';
-import { MemberEntity, GuildEntity } from '@entity';
-import { CiGuild, CiGuildReportsManager, GuildTempChannelsManager } from '@structures';
-import { Snowflake } from 'discord.js';
-import { Guild } from 'discord.js';
-import { Message } from 'discord.js';
+import { GuildEntity, MemberEntity } from '@entity';
+import { CiGuildReportsManager, GuildTempChannelsManager } from '@structures';
+import { Guild, Message, Snowflake } from 'discord.js';
 
 declare module 'discord.js' {
   interface Guild {
@@ -32,6 +30,13 @@ declare module 'discord.js' {
 declare module 'discord-akairo' {
   interface CommandOptions {
     cidescription?: CiDescription;
+  }
+  interface Command {
+    cidescription?: CiDescription;
+    argsInOptions?: ArgumentOptions[] | ArgumentGenerator;
+  }
+  interface ArgumentOptions {
+    name: string;
   }
 }
 
@@ -82,6 +87,8 @@ export interface CiGuildDonate {
 
 export interface CiGuildReport {
   reportManagers: Snowflake[];
+  memberHasReport: Snowflake[];
+  reportRoleID: Snowflake;
 }
 
 export const mainGuildId = '703977369966346332';

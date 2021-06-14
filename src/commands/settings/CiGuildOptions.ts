@@ -1,12 +1,7 @@
-import { Message, GuildMember } from 'discord.js';
-import { CiEmbed } from '@structures';
-import { messages } from '@resources';
-import { randomInt } from 'crypto';
 import { CiCommand } from '@akairo';
-import { Guild } from 'discord.js';
-import { Channel } from 'discord.js';
 import { GuildEntity } from '@entity';
-import { TextChannel } from 'discord.js';
+import { CiEmbed } from '@structures';
+import { Message } from 'discord.js';
 
 export default class GuildOptionsCommand extends CiCommand {
   constructor() {
@@ -19,11 +14,13 @@ export default class GuildOptionsCommand extends CiCommand {
           index: 0,
           id: 'typeSettings',
           type: 'string',
+          name: 'тип',
         },
         {
           index: 1,
           id: 'valueSettings',
           type: 'string',
+          name: 'значение',
         },
       ],
     });
@@ -41,6 +38,7 @@ export default class GuildOptionsCommand extends CiCommand {
       'voicePerCount',
       'msgPerCount',
       'startRole',
+      'reportRoleID',
     ];
     switch (typeSettings) {
       case 'list':
@@ -181,11 +179,37 @@ export default class GuildOptionsCommand extends CiCommand {
             `Значение параметра у гильдии измененно: ${newRole}`
           )
         );
+      case 'reportRoleID':
+        if (!valueSettings)
+          return channel.send(
+            new CiEmbed().info(
+              `Запрос на выдачу параметра ${typeSettings}`,
+              null,
+              `Значение параметра у гильдии: <@&${guild.report.options.reportRoleID}>`
+            )
+          );
+        if (!newRole)
+          return channel.send(
+            new CiEmbed().error(
+              `Параметр ${typeSettings} не обновлён!`,
+              null,
+              `Значение параметра у гильдии осталось тем же: <@&${guild.report.options.reportRoleID}>`
+            )
+          );
+        guild.report.options.reportRoleID = valueSettings;
+        GuildEntity.update({ id: guild.id }, { report: guild.report.options });
+        return channel.send(
+          new CiEmbed().info(
+            `Обновление параметра ${typeSettings}`,
+            null,
+            `Значение параметра у гильдии измененно: ${newRole}`
+          )
+        );
       default:
         return channel.send(
           new CiEmbed().error(
             `Параметр не найден!`,
-            '',
+            null,
             `Значения параметров у гильдии не изменены.`
           )
         );
