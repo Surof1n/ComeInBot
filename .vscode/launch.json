@@ -10,7 +10,7 @@
 			"outputCapture":"console",
 			"restart": true,
 			"name": "Launch via NPM",
-			"preLaunchTask": "tsc: watch",
+			// "preLaunchTask": "tsc: watch",
 			"runtimeExecutable": "npm",
 			"runtimeArgs": ["run-script", "start"],
 			"port": 19229,

@@ -32,4 +32,7 @@ export class MemberEntity extends BaseEntity {
 
   @Column('int', { default: 0 })
   messageCount: number;
+
+  @Column('text', { default: '' })
+  aboutProfile: string;
 }

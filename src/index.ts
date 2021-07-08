@@ -4,6 +4,7 @@ import { CiClient, CiGuild, CiGuildMember } from '@structures';
 import { Structures } from 'discord.js';
 import { createConnection } from 'typeorm';
 import { emojis } from '@resources';
+import { registerFont } from 'canvas';
 
 Structures.extend('Guild', () => CiGuild);
 

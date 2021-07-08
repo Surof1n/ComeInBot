@@ -41,7 +41,7 @@ export class CiClient extends AkairoClient {
             this.util.checkMember(item, member, false, true)
           )
         )
-        .filter((m) => m.id != message.author.id)
+        .filter((m) => m?.id != message.author?.id)
         .filter((m) => m);
       if (members.length > 1) return members;
       else if (members.length == 1 && !(members[0] instanceof GuildMember)) {

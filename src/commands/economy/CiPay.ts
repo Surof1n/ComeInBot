@@ -58,8 +58,6 @@ export default class SendCommand extends CiCommand {
       receiver: GuildMember | GuildMember[] | string; // Сд
     }
   ): Promise<Message> {
-    if (!receiver || !valueType || !count)
-      return channel.send(new CiEmbed().errorCommandValue(this.prefix));
     count = Math.round(count);
     const positive = count > 0;
     count = Math.abs(count);

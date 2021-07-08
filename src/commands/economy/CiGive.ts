@@ -57,9 +57,11 @@ export default class giveCommand extends CiCommand {
       valueType: string;
       receiver: GuildMember[] | GuildMember;
     }
-  ): Promise<Message> {
-    if (!receiver || !valueType || !count)
-      return channel.send(new CiEmbed().errorCommandValue(this.prefix));
+  ): Promise<void> {
+    if (!receiver || !valueType || !count) {
+      channel.send(new CiEmbed().errorCommandValue(this.prefix));
+      return;
+    }
 
     count = Math.round(count);
     const positive = count > 0;
@@ -67,8 +69,10 @@ export default class giveCommand extends CiCommand {
     switch (valueType) {
       case guild.economy.emoji:
         if (Array.isArray(receiver)) {
-          if (member.economyController.sparkCount < receiver.length * count)
-            return channel.send(new CiEmbed().errorCommandEconomyValue(this.prefix));
+          if (member.economyController.sparkCount < receiver.length * count) {
+            channel.send(new CiEmbed().errorCommandEconomyValue(this.prefix));
+            return;
+          }
 
           receiver.forEach((recMember) => {
             const action = `Передача ${count} ${valueType} от ${member.displayName}, к ${recMember.displayName}`;
@@ -99,7 +103,7 @@ export default class giveCommand extends CiCommand {
             embAction.header
           );
           if (boolAboutSend) {
-            return channel.send(
+            channel.send(
               new CiEmbed().info(
                 'Уведомление!',
                 embAction.header,
@@ -107,15 +111,17 @@ export default class giveCommand extends CiCommand {
                 embAction.quoting.author
               )
             );
+            return;
           } else {
-            return channel.send(new CiEmbed().errorCommandEconomyValue(this.prefix));
+            channel.send(new CiEmbed().errorCommandEconomyValue(this.prefix));
+            return;
           }
         }
         break;
 
       default:
-        return channel.send(new CiEmbed().errorCommandValue(this.prefix));
-        break;
+        channel.send(new CiEmbed().errorCommandValue(this.prefix));
+        return;
     }
   }
 }

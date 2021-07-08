@@ -99,3 +99,32 @@ export enum Colors {
   Green = 0x43b581,
   Invise = 0x36393f,
 }
+
+export const CardSettings = {
+  AVATAR_SIZE: { x: 182, y: 182, r: 91 },
+  IMAGE_SIZE: { x: 750, y: 517 },
+  POSITIONS: {
+    avatar: { x: 46, y: 101 },
+    userInfo: { x: 295, y: 271 },
+    nickname: { x: 62, y: 41 },
+    role: { x: 62, y: 291 },
+    wallet: {
+      warmth: { x: 313, y: 163 },
+      sparks: { x: 418, y: 163 },
+      pents: { x: 512, y: 163 },
+      xp: { x: 605, y: 163 },
+    },
+    stats: {
+      messages: { x: 183, y: 336 },
+      vc_hours: { x: 183, y: 366 },
+      days: { x: 183, y: 395 },
+    },
+  },
+  COLORS: { black: '#fff', white: '#000' },
+};
+
+export const RoleLevel = {
+  roleMemberlvlPart1: '846794357235515413',
+  roleMemberlvlPart2: '846794339069591591',
+  roleMemberlvlPart3: '846794679999397908',
+};

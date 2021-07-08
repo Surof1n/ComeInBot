@@ -23,6 +23,7 @@ declare module 'discord.js' {
     economyController: EconomyController;
     reputationController: ReputationController;
     pentaController: PentaController;
+    aboutValue: string;
     init(data: MemberEntity): void;
   }
 }

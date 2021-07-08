@@ -13,14 +13,15 @@ export class CiGuildMember extends GuildMember {
   reputationController: ReputationController;
   pentaController: PentaController;
   timeController: TimeController;
+  private about: string;
   // eslint-disable-next-line @typescript-eslint/ban-types
   constructor(client: CiClient, data: object, guild: Guild) {
     super(client, data, guild);
-
     this.timeController;
     this.economyController;
     this.reputationController;
     this.pentaController;
+    this.about;
   }
 
   public async init(dataMember?: MemberEntity): Promise<void> {
@@ -29,6 +30,7 @@ export class CiGuildMember extends GuildMember {
       dataMember.id = this.id;
       await dataMember.save();
     }
+    this.aboutValue = dataMember.aboutProfile;
     this.timeController = new TimeController(
       this,
       dataMember.voiceStartDate,
@@ -48,5 +50,12 @@ export class CiGuildMember extends GuildMember {
       dataMember.rankedReputationCount
     );
     return;
+  }
+  get aboutValue() {
+    return this.about;
+  }
+  set aboutValue(newAboutValue: string) {
+    MemberEntity.update({ id: this.id }, { aboutProfile: newAboutValue });
+    this.about = newAboutValue;
   }
 }

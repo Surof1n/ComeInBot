@@ -11,7 +11,7 @@ export default class ReportManagers extends CiCommand {
       args: [
         {
           index: 0,
-          id: 'reportManager',
+          id: 'reportForMember',
           type: 'member',
           name: 'пользователь',
         },
